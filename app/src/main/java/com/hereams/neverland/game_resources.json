@@ -1,0 +1,17 @@
+{
+  "name": "Jack",
+  "level": "1",
+  "exp": "0",
+  "char_class": "Knight",
+  "floor": "1",
+  "savePoint": "1",
+  "atk": "7",
+  "def": "7",
+  "hp": "100",
+  "VIT": "1",
+  "STR": "1",
+  "DEX": "1",
+  "INT": "1",
+  "CRT": "1",
+  "moves": "2"
+}
