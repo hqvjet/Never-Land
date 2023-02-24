@@ -16,7 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        android:text="Button"
+        android:text="Skip Story"
+        android:onClick="skip"
         tools:layout_editor_absoluteX="627dp"
         tools:layout_editor_absoluteY="16dp" />
 

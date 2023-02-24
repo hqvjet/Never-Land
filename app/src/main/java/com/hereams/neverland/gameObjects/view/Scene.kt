@@ -16,7 +16,7 @@ class Scene@JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : SurfaceView(context, attrs, defStyleAttr), SurfaceHolder.Callback {
 
-    private lateinit var scene: MediaPlayer
+    public lateinit var scene: MediaPlayer
     private var sf_holder: SurfaceHolder = holder
     private lateinit var button: Button
     val activity = context as Activity
@@ -24,11 +24,10 @@ class Scene@JvmOverloads constructor(
 
     init {
         sf_holder.addCallback(this)
-
+        scene = MediaPlayer.create(context, R.raw.first_scene)
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
-        scene = MediaPlayer.create(context, R.raw.first_scene)
         scene.setDisplay(sf_holder)
         scene.start()
     }

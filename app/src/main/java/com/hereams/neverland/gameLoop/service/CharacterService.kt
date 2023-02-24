@@ -2,37 +2,34 @@ package com.hereams.neverland.gameLoop.service
 
 import com.hereams.neverland.gameObjects.view.CharacterView
 import com.hereams.neverland.gameObjects.view.DPadView
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sqrt
 
-public class CharacterService(private val view: CharacterView) {
+class CharacterService(private val view: CharacterView) {
 
-    private lateinit var controller: DPadView
-
-    public fun addDPad(dpad: DPadView) {
-        controller = dpad
+    /**
+     * Update function for updating velocity of character, then it calls teleport function
+     * @param x, y
+     * @return void
+     */
+    fun update(x: Float, y: Float) {
+        view.velocity.x = x
+        view.velocity.y = y
+        teleport(view.velocity.x, view.velocity.y)
     }
 
-    public fun openInventory() {
-        //logic
+    fun teleport(x: Float, y: Float) {
+        view.position.x += x
+        view.position.y += y
+        view.invalidate()
     }
 
-    public fun openSelf() {
-        //logic
-    }
-
-    public fun interactWithNPC(npc_name: String) {
-        //logic
-    }
-
-    public fun openOption() {
-
-    }
-
-    public fun combat() {
-
-    }
-
-    public fun die() {
-
+    fun render() {
+        view.canvas = view.sf_holder.lockCanvas()
+        view.draw(view.canvas!!)
+        view.sf_holder.unlockCanvasAndPost(view.canvas)
     }
 
 }

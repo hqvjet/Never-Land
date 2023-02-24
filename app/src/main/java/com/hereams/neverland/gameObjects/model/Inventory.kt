@@ -1,6 +1,6 @@
 package com.hereams.neverland.gameObjects.model
 
-class Inventory(slot: Int, gold: Int, items: MutableList<Item>) {
+class Inventory(slot: Int, gold: Int) {
     private lateinit var inventory_slot: Number
     private lateinit var inventory_gold: Number
     private lateinit var inventory_items: MutableList<Item>
@@ -8,7 +8,7 @@ class Inventory(slot: Int, gold: Int, items: MutableList<Item>) {
     init {
         inventory_slot = slot
         inventory_gold = gold
-        inventory_items = items
+        inventory_items = mutableListOf()
     }
 
     fun getInventorySlot() = inventory_slot

@@ -4,34 +4,48 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Matrix
+import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.hereams.neverland.R
-import com.hereams.neverland.gameLoop.controller.thread.GameThread
+import com.hereams.neverland.constant.*
+import com.hereams.neverland.gameLoop.controller.thread.CharacterMotionThread
+import com.hereams.neverland.gameLoop.controller.thread.CharacterThread
+import com.hereams.neverland.gameLoop.service.CharacterService
 import com.hereams.neverland.gameObjects.model.Character
+import com.hereams.neverland.gameObjects.model.Inventory
+import com.hereams.neverland.gameObjects.model.Option
+import com.hereams.neverland.gameObjects.model.Weapon
 
-class CharacterView@JvmOverloads constructor(
+class CharacterView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : SurfaceView(context, attrs, defStyleAttr) {
+    var service: CharacterService = CharacterService(this)
+    private val helper: Helper = Helper(this)
+//    var thread: CharacterThread = CharacterThread(service)
+    var move_thread: CharacterMotionThread = CharacterMotionThread(this)
 
-    private lateinit var originBitmap: Bitmap
-    private lateinit var bitmap: Bitmap
-    private lateinit var sf_holder: SurfaceHolder
-    private lateinit var game_thread: GameThread
-    private var speedX = 0
-    private var speedY = 0
-    private lateinit var spriteWidth: Number
-    private lateinit var spriteHeight: Number
-    public lateinit var model: Character
-    private lateinit var d_pad: DPadView
+    var sf_holder: SurfaceHolder = holder
+    lateinit var canvas: Canvas
+
+    //    private lateinit var spriteWidth: Number
+//    private lateinit var spriteHeight: Number
+    lateinit var model: Character
+
+    private var originBitmap: Bitmap
+    private var bitmap: Bitmap
+    var position: PointF = PointF(helper.toDP(100f), helper.toDP(100f))
+    var velocity: PointF = PointF(helper.toDP(0f), helper.toDP(0f))
 
     init {
 
         //convert static bitmap to mutable bitmap
+        setBackgroundColor(Color.TRANSPARENT)
         originBitmap = BitmapFactory.decodeResource(resources, R.mipmap.character)
         val matrix = Matrix()
         matrix.setScale(300.toFloat() / originBitmap.width, 300.toFloat() / originBitmap.height)
@@ -45,17 +59,27 @@ class CharacterView@JvmOverloads constructor(
             false
         )
 
-        sf_holder = holder
-        game_thread = GameThread(this)
+        model = Character(
+            "Jack", 1, 1, CLASS_NAME[KNIGHT], 1, 1, BASE_ATTACK[KNIGHT],
+            BASE_DEF[KNIGHT], BASE_HP[KNIGHT], 1, 1, 1, 1, 1, BASE_MOVE[KNIGHT],
+            Weapon(
+                ITEM_NAME[STEEL_SWORD],
+                ITEM_DESCRIPTION[STEEL_SWORD],
+                ITEM_PRICE[STEEL_SWORD],
+                ITEM_CLASSIFY[STEEL_SWORD],
+                ITEM_DISCARDABLE[STEEL_SWORD],
+                ITEM_TRADEALBE[STEEL_SWORD],
+                ITEM_STAT[STEEL_SWORD],
+                1
+            ),
+            Inventory(10, 1000),
+            Option(EN, "jacky", "1231233")
+        )
 
         sf_holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-//                var canvas: Canvas = sf_holder.lockCanvas()
-//                draw(canvas)
-//                sf_holder.unlockCanvasAndPost(canvas)
-//                println("running")
-                game_thread.setStart(true)
-                game_thread.start()
+//                thread.turnOn()
+                move_thread.turnOn()
             }
 
             override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
@@ -63,10 +87,10 @@ class CharacterView@JvmOverloads constructor(
 
             override fun surfaceDestroyed(p0: SurfaceHolder) {
                 var retry: Boolean = true
-                game_thread.setStart(false)
                 while (retry) {
                     try {
-                        game_thread.join()
+//                        thread.turnOff()
+                        move_thread.turnOff()
                         retry = false
                     } catch (e: InterruptedException) {
                     }
@@ -75,24 +99,11 @@ class CharacterView@JvmOverloads constructor(
         })
     }
 
-    fun addModel(value: Character) {
-        model = value
-    }
-
-    fun addDPad(value: DPadView) {
-        d_pad = value
-        game_thread.addDPad(d_pad)
-    }
-
-    fun move(speedx: Int, speedy: Int) {
-        speedX += speedx
-        speedY += speedy
-    }
-
     public override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.drawColor(resources.getColor(R.color.teal_200))
-        canvas?.drawBitmap(bitmap, speedX.toFloat(), speedY.toFloat(), null)
+        canvas?.drawColor(Color.TRANSPARENT)
+//        println("${position.x} ${position.y}")
+        canvas?.drawBitmap(bitmap, position.x, position.y, null)
     }
 
 }
