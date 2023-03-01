@@ -1,6 +1,6 @@
 package com.hereams.neverland.gameLoop.controller.thread
 
-import com.hereams.neverland.gameObjects.view.CharacterView
+import com.hereams.neverland.gameObjects.view.component.CharacterView
 
 class CharacterMotionThread(private val view: CharacterView) : Thread() {
 
@@ -19,7 +19,6 @@ class CharacterMotionThread(private val view: CharacterView) : Thread() {
     override fun run() {
         while (running){
             view.service.render()
-//            println("running: ${view.position.x} ${view.position.y}")
         }
 
     }

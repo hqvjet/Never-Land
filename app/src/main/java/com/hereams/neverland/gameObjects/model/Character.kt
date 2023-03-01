@@ -122,7 +122,7 @@ class Character {
     constructor(
         name: String, level: Int, exp: Int, char_class: String,
         floor: Int, savePoint: Int, atk: Int, def: Int, hp: Int,
-        VIT: Int, STR: Int, DEX: Int, INT: Int, CRT: Int, moveS: Int,
+        VIT: Int, STR: Int, DEX: Int, INT: Int, CRT: Int, moveS: Float,
         weapon: Weapon, inventory: Inventory, option: Option
     ) {
         setPlayerName(name)

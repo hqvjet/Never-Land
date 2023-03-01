@@ -3,8 +3,8 @@ package com.hereams.neverland.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.hereams.neverland.R
-import com.hereams.neverland.gameObjects.view.CharacterView
-import com.hereams.neverland.gameObjects.view.DPadView
+import com.hereams.neverland.gameObjects.view.component.CharacterView
+import com.hereams.neverland.gameObjects.view.component.DPadView
 
 class InGame : AppCompatActivity() {
 

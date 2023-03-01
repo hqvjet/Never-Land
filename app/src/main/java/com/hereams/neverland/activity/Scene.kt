@@ -6,8 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.hereams.neverland.R
-import com.hereams.neverland.gameLoop.GameLoop
-import com.hereams.neverland.gameObjects.view.Scene
+import com.hereams.neverland.gameObjects.view.component.Scene
 
 class Scene: AppCompatActivity() {
 

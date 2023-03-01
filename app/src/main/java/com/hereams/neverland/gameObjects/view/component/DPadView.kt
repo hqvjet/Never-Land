@@ -1,4 +1,4 @@
-package com.hereams.neverland.gameObjects.view
+package com.hereams.neverland.gameObjects.view.component
 
 import android.content.Context
 import android.graphics.Canvas
@@ -12,7 +12,6 @@ import android.view.SurfaceView
 import com.hereams.neverland.constant.Helper
 import com.hereams.neverland.gameLoop.controller.thread.DPadThread
 import com.hereams.neverland.gameLoop.service.DPadService
-import kotlinx.coroutines.delay
 
 class DPadView @JvmOverloads constructor(
     context: Context,
@@ -30,7 +29,7 @@ class DPadView @JvmOverloads constructor(
     var service: DPadService = DPadService(this)
     private val helper: Helper = Helper(this)
     var position: PointF = PointF(helper.toDP(250f), helper.toDP(250f))
-    var center: Float = helper.toDP(250f)
+    val center: Float = helper.toDP(250f)
     var outerRadius = helper.toDP(200f)
     private var innerRadius = helper.toDP(80f)
     var surfaceHolder: SurfaceHolder = holder
@@ -91,8 +90,7 @@ class DPadView @JvmOverloads constructor(
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action) {
-            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                service.holding = true
+            MotionEvent.ACTION_DOWN -> {
                 val rawX = event.rawX // raw x position in pixels
                 val rawY = event.rawY // raw y position in pixels
 
@@ -103,9 +101,41 @@ class DPadView @JvmOverloads constructor(
                 val y = rawY - location[1] // adjust y to be relative to view
 
                 service.update(helper.toDP(x), helper.toDP(y))
+
+                service.holding = true
             }
-            MotionEvent.ACTION_UP -> {
+
+            MotionEvent.ACTION_MOVE -> {
+
+                //eliminate previous thread
                 var retry: Boolean = true
+                service.is_thread_running = false
+                while (retry) {
+                    try {
+                        service.holding = false
+                        service.action_handler.join()
+                        retry = false
+                    } catch (e: InterruptedException) {
+                    }
+                }
+
+                val rawX = event.rawX // raw x position in pixels
+                val rawY = event.rawY // raw y position in pixels
+
+                val location = IntArray(2)
+                getLocationOnScreen(location)
+
+                val x = rawX - location[0] // adjust x to be relative to view
+                val y = rawY - location[1] // adjust y to be relative to view
+
+                service.update(helper.toDP(x), helper.toDP(y))
+                service.holding = true
+            }
+
+            MotionEvent.ACTION_UP -> {
+
+                var retry: Boolean = true
+                service.is_thread_running = false
                 while (retry) {
                     try {
                         service.holding = false
@@ -116,9 +146,9 @@ class DPadView @JvmOverloads constructor(
                 }
                 service.update(center, center)
                 character_view.service.update(0f, 0f)
+
             }
         }
-
         return true
     }
 

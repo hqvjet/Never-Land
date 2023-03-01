@@ -1,4 +1,4 @@
-package com.hereams.neverland.gameObjects.view
+package com.hereams.neverland.gameObjects.view.component
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,7 @@ import android.view.SurfaceView
 import android.widget.Button
 import com.hereams.neverland.R
 
-class Scene@JvmOverloads constructor(
+class Scene @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -20,7 +20,6 @@ class Scene@JvmOverloads constructor(
     private var sf_holder: SurfaceHolder = holder
     private lateinit var button: Button
     val activity = context as Activity
-
 
     init {
         sf_holder.addCallback(this)

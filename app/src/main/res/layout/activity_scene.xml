@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.Scene">
 
-    <com.hereams.neverland.gameObjects.view.Scene
+    <com.hereams.neverland.gameObjects.view.component.Scene
         android:id="@+id/scene"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

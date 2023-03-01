@@ -1,9 +1,6 @@
 package com.hereams.neverland.gameLoop.controller.thread
 
-import android.graphics.Canvas
 import com.hereams.neverland.gameLoop.service.CharacterService
-import com.hereams.neverland.gameObjects.view.CharacterView
-import com.hereams.neverland.gameObjects.view.DPadView
 
 class CharacterThread(private var service: CharacterService) : Thread() {
 

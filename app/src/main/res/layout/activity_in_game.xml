@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".activity.InGame">
 
-    <com.hereams.neverland.gameObjects.view.CharacterView
+    <com.hereams.neverland.gameObjects.view.component.CharacterView
         android:id="@+id/character"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center" />
 
-    <com.hereams.neverland.gameObjects.view.DPadView
+    <com.hereams.neverland.gameObjects.view.component.DPadView
         android:id="@+id/dpad"
         android:layout_width="180dp"
         android:layout_height="180dp"

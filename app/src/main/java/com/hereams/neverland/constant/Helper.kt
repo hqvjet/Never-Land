@@ -1,9 +1,13 @@
 package com.hereams.neverland.constant
 
+import android.content.res.Resources
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.SurfaceView
 
 class Helper(private val view: SurfaceView) {
+
+    private val displayMetrics: DisplayMetrics = Resources.getSystem().displayMetrics
 
     fun toDP(value: Float): Float {
         val density = view.resources.displayMetrics.density
@@ -12,6 +16,14 @@ class Helper(private val view: SurfaceView) {
             value / density,
             view.resources.displayMetrics
         );
+    }
+
+    fun getDeviceWidth(): Int {
+        return displayMetrics.widthPixels
+    }
+
+    fun getDeviceHeight(): Int{
+        return displayMetrics.heightPixels
     }
 
 }
