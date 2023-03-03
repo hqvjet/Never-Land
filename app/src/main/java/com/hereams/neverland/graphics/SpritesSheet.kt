@@ -7,6 +7,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.view.SurfaceView
 import com.hereams.neverland.R
+import com.hereams.neverland.constant.SPRITES_SIZE
 
 class SpritesSheet(private val position: PointF, private val context: Context) {
     private var bitmapOptions: BitmapFactory.Options = BitmapFactory.Options()
@@ -19,7 +20,7 @@ class SpritesSheet(private val position: PointF, private val context: Context) {
 
     fun getCharacterSpritesArray(): Array<Sprites> {
         val spritesArray = Array(7) { i ->
-            Sprites(this, Rect(i * 64, 0, (i + 1) * 64, 64))
+            Sprites(this, Rect(i * SPRITES_SIZE, 0, (i + 1) * SPRITES_SIZE, SPRITES_SIZE))
         }
         return spritesArray
     }

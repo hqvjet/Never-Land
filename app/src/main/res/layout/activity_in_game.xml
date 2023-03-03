@@ -8,9 +8,17 @@
 
     <com.hereams.neverland.gameObjects.view.component.CharacterView
         android:id="@+id/character"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="600dp"
+        android:layout_height="250dp"
         android:layout_gravity="center" />
+
+    <com.hereams.neverland.gameObjects.view.component.InfoBox
+        android:id="@+id/info_box"
+        android:layout_width="300dp"
+        android:layout_height="75dp"
+        android:layout_gravity="top|left"
+        android:layout_marginLeft="10px"
+        android:elevation="1dp" />
 
     <com.hereams.neverland.gameObjects.view.component.DPadView
         android:id="@+id/dpad"

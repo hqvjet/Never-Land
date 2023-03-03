@@ -98,4 +98,12 @@ class CharacterView @JvmOverloads constructor(
         animator.draw(canvas, this)
     }
 
+    fun getwidth(): Float {
+        return helper.toDP(width.toFloat())
+    }
+
+    fun getheight(): Float {
+        return helper.toDP(height.toFloat())
+    }
+
 }

@@ -5,7 +5,7 @@ import android.graphics.*
 class Sprites(private val spritesSheet: SpritesSheet, private val rect: Rect) {
 
     fun draw(canvas: Canvas?, position: PointF) {
-        canvas?.drawColor(Color.RED, PorterDuff.Mode.CLEAR)
+        canvas?.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         canvas?.drawBitmap(
             spritesSheet.getBitmap(),
             rect,
