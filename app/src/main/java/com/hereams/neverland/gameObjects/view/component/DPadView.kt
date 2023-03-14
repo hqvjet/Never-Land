@@ -144,8 +144,9 @@ class DPadView @JvmOverloads constructor(
                     } catch (e: InterruptedException) {
                     }
                 }
-                service.update(center, center)
+
                 character_view.service.update(0f, 0f)
+                service.update(center, center)
 
             }
         }

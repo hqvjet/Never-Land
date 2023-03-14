@@ -8,8 +8,8 @@
 
     <com.hereams.neverland.gameObjects.view.component.CharacterView
         android:id="@+id/character"
-        android:layout_width="600dp"
-        android:layout_height="250dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="center" />
 
     <com.hereams.neverland.gameObjects.view.component.InfoBox

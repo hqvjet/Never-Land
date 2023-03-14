@@ -7,6 +7,7 @@ import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.hereams.neverland.R
 import com.hereams.neverland.constant.*
 import com.hereams.neverland.gameLoop.controller.thread.CharacterMotionThread
 import com.hereams.neverland.gameLoop.service.CharacterService
@@ -16,6 +17,7 @@ import com.hereams.neverland.gameObjects.model.Option
 import com.hereams.neverland.gameObjects.model.Weapon
 import com.hereams.neverland.gameObjects.states.CharacterState
 import com.hereams.neverland.graphics.Animator
+import com.hereams.neverland.graphics.Sprites
 import com.hereams.neverland.graphics.SpritesSheet
 
 class CharacterView @JvmOverloads constructor(
@@ -29,7 +31,11 @@ class CharacterView @JvmOverloads constructor(
 
     var sf_holder: SurfaceHolder = holder
     lateinit var canvas: Canvas
-    private lateinit var spritesSheet: SpritesSheet
+    private lateinit var characterForwardMovementSpritesSheet: SpritesSheet
+    private lateinit var characterRightMovementSpritesSheet: SpritesSheet
+    private lateinit var characterLeftMovementSpritesSheet: SpritesSheet
+    private lateinit var characterDownMovementSpritesSheet: SpritesSheet
+    private lateinit var movementSpritesSheetArray: ArrayList<SpritesSheet>
     lateinit var animator: Animator
     lateinit var state: CharacterState
 
@@ -40,16 +46,31 @@ class CharacterView @JvmOverloads constructor(
     //    private var originBitmap: Bitmap
 //    private var bitmap: Bitmap
     var position: PointF = PointF(
-        helper.toDP((helper.getDeviceWidth() / 2).toFloat()),
-        helper.toDP((helper.getDeviceHeight() / 2.toFloat()))
+        helper.toDP((width / 2).toFloat()),
+        helper.toDP((height / 2).toFloat())
     )
+
     var velocity: PointF = PointF(helper.toDP(0f), helper.toDP(0f))
 
     init {
 
         setBackgroundColor(Color.TRANSPARENT)
-        spritesSheet = SpritesSheet(position, context)
-        animator = Animator(position, spritesSheet.getCharacterSpritesArray())
+
+        characterForwardMovementSpritesSheet =
+            SpritesSheet(position, context, R.drawable.front_movement, DIRECTION_FORWARD)
+        characterRightMovementSpritesSheet =
+            SpritesSheet(position, context, R.drawable.side_movement, DIRECTION_RIGHT)
+        characterDownMovementSpritesSheet =
+            SpritesSheet(position, context, R.drawable.back_movement, DIRECTION_DOWN)
+        characterLeftMovementSpritesSheet =
+            SpritesSheet(position, context, R.drawable.side_movement, DIRECTION_LEFT)
+        movementSpritesSheetArray = ArrayList()
+        movementSpritesSheetArray.add(characterForwardMovementSpritesSheet)
+        movementSpritesSheetArray.add(characterRightMovementSpritesSheet)
+        movementSpritesSheetArray.add(characterDownMovementSpritesSheet)
+        movementSpritesSheetArray.add(characterLeftMovementSpritesSheet)
+
+        animator = Animator(position, movementSpritesSheetArray)
         state = CharacterState(this)
         model = Character(
             "Jack", 1, 1, CLASS_NAME[KNIGHT], 1, 1, BASE_ATTACK[KNIGHT],
@@ -96,14 +117,6 @@ class CharacterView @JvmOverloads constructor(
 
     public override fun onDraw(canvas: Canvas?) {
         animator.draw(canvas, this)
-    }
-
-    fun getwidth(): Float {
-        return helper.toDP(width.toFloat())
-    }
-
-    fun getheight(): Float {
-        return helper.toDP(height.toFloat())
     }
 
 }

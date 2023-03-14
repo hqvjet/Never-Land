@@ -14,6 +14,7 @@ class CharacterService(private val view: CharacterView) {
         view.velocity.x = x
         view.velocity.y = y
         view.state.update()
+        println(view.state.getState().toString())
         teleport(view.velocity.x, view.velocity.y)
     }
 

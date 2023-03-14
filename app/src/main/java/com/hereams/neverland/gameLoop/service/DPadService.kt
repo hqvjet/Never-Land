@@ -6,8 +6,6 @@ import kotlin.math.*
 
 class DPadService(private val view: DPadView) {
 
-    val PI: Float = 3.1415927F
-
     private lateinit var character_view: CharacterView
     lateinit var action_handler: Thread
     var holding: Boolean = false
@@ -27,7 +25,6 @@ class DPadService(private val view: DPadView) {
             if (y > view.center)
                 view.position.y = view.position.y + (view.center - view.position.y) * 2
         }
-
 
 
         //character handler: get x, y speed
@@ -77,7 +74,6 @@ class DPadService(private val view: DPadView) {
 
                     character_view.service.update(v_x, v_y)
                     Thread.sleep(50)
-//        character_view.service.update(1f, 1f)
                 }
             }
         }
