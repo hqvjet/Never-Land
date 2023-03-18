@@ -20,18 +20,18 @@ class CharacterService(private val view: CharacterView) {
 
     fun teleport(x: Float, y: Float) {
 
-        if (view.position.x + x >= 0 && view.position.x <= view.width - SPRITES_SIZE)
+//        if (view.position.x + x >= 0 && view.position.x <= view.width - SPRITES_SIZE)
             view.position.x += x
-        else if (view.position.x > view.width - SPRITES_SIZE)
-            view.position.x = (view.width - SPRITES_SIZE).toFloat()
-        else
-            view.position.x = 0f
-        if (view.position.y + y >= 0 && view.position.y <= view.height - SPRITES_SIZE)
+//        else if (view.position.x > view.width - SPRITES_SIZE)
+//            view.position.x = (view.width - SPRITES_SIZE).toFloat()
+//        else
+//            view.position.x = 0f
+//        if (view.position.y + y >= 0 && view.position.y <= view.height - SPRITES_SIZE)
             view.position.y += y
-        else if (view.position.y > view.height - SPRITES_SIZE)
-            view.position.y = (view.height - SPRITES_SIZE).toFloat()
-        else
-            view.position.y = 0f
+//        else if (view.position.y > view.height - SPRITES_SIZE)
+//            view.position.y = (view.height - SPRITES_SIZE).toFloat()
+//        else
+//            view.position.y = 0f
         view.animator.update(view.position)
     }
 

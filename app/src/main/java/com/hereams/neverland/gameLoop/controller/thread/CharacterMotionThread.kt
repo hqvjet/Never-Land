@@ -5,6 +5,7 @@ import com.hereams.neverland.gameObjects.view.component.CharacterView
 class CharacterMotionThread(private val view: CharacterView) : Thread() {
 
     private var running: Boolean = false
+    private var sleepTime: Long = 0
 
     fun turnOn() {
         running = true
@@ -16,9 +17,14 @@ class CharacterMotionThread(private val view: CharacterView) : Thread() {
         join()
     }
 
+    fun setSleepTime(value: Long) {
+        sleepTime = value
+    }
+
     override fun run() {
         while (running){
             view.service.render()
+            sleep(sleepTime)
         }
 
     }

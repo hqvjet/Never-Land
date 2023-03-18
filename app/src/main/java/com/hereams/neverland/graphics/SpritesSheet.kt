@@ -53,7 +53,7 @@ class SpritesSheet(
         }
 
 
-        zoomMatrix.setScale(2f, 2f)
+        zoomMatrix.setScale(8f, 8f)
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, zoomMatrix, true)
 
     }

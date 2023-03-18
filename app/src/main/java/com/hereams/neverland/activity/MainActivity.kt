@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
 
     fun startGame(view: View) {
-        println("sd,mddddddddddddddddddddddddddddddddd")
         scene_intent = Intent(this, Scene::class.java)
         startActivity(scene_intent)
 

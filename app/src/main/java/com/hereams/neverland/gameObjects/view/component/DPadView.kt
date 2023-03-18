@@ -35,7 +35,7 @@ class DPadView @JvmOverloads constructor(
     var surfaceHolder: SurfaceHolder = holder
     lateinit var canvas: Canvas
 
-    private var thread: DPadThread
+    var thread: DPadThread
 
     init {
         // get sf holder object

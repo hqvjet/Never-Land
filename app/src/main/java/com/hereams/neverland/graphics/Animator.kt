@@ -12,12 +12,11 @@ class Animator(
 ) {
 
     private var frameIndex = 0
-    private var frameWaiter = WAITING_PER_FRAME
     private lateinit var characterForwardMovementSpritesArray: Array<Sprites>
     private lateinit var characterRightMovementSpritesArray: Array<Sprites>
     private lateinit var characterDownMovementSpritesArray: Array<Sprites>
     private lateinit var characterLeftMovementSpritesArray: Array<Sprites>
-    private var changed: Boolean = false
+    private var direction: Int = DIRECTION_FORWARD
 
     init {
         characterForwardMovementSpritesArray =
@@ -33,50 +32,43 @@ class Animator(
     fun draw(canvas: Canvas?, view: CharacterView) {
         when (view.getState()) {
             CharacterState.State.NOT_MOVING -> {
-                changed = true
-                drawFrame(canvas, characterForwardMovementSpritesArray[0])
+                drawFrame(
+                    canvas,
+                    if (direction == DIRECTION_FORWARD) characterForwardMovementSpritesArray[0]
+                    else if (direction == DIRECTION_DOWN) characterDownMovementSpritesArray[0]
+                    else if (direction == DIRECTION_RIGHT) characterRightMovementSpritesArray[0]
+                    else characterLeftMovementSpritesArray[0]
+                )
             }
             CharacterState.State.IS_MOVING_RIGHT -> {
-                changed = true
-                if (handleFrameWaiter()) {
-                    drawFrame(canvas, characterRightMovementSpritesArray[frameIndex])
-                }
+                direction = DIRECTION_RIGHT
+                drawFrame(canvas, characterRightMovementSpritesArray[frameIndex])
+                toggleMovingAnimationSprites()
+
             }
             CharacterState.State.IS_MOVING_FORWARD -> {
-                changed = true
-                if (handleFrameWaiter()) {
-                    drawFrame(canvas, characterForwardMovementSpritesArray[frameIndex])
-                    toggleMovingAnimationSprites()
-                }
+                direction = DIRECTION_FORWARD
+                drawFrame(canvas, characterForwardMovementSpritesArray[frameIndex])
+                toggleMovingAnimationSprites()
+
             }
             CharacterState.State.IS_MOVING_LEFT -> {
-                if (handleFrameWaiter()) {
-                    changed = true
-                    drawFrame(canvas, characterLeftMovementSpritesArray[frameIndex])
-                    toggleMovingAnimationSprites()
-                }
+                direction = DIRECTION_LEFT
+                drawFrame(canvas, characterLeftMovementSpritesArray[frameIndex])
+                toggleMovingAnimationSprites()
+
             }
             CharacterState.State.IS_MOVING_DOWN -> {
-                changed = true
-                if (handleFrameWaiter()) {
-                    drawFrame(canvas, characterDownMovementSpritesArray[frameIndex])
-                    toggleMovingAnimationSprites()
-                }
+                direction = DIRECTION_DOWN
+                drawFrame(canvas, characterDownMovementSpritesArray[frameIndex])
+                toggleMovingAnimationSprites()
+
             }
         }
     }
 
     private fun drawFrame(canvas: Canvas?, sprites: Sprites) {
         sprites.draw(canvas, position)
-    }
-
-    private fun handleFrameWaiter(): Boolean {
-        if (frameWaiter == WAITING_PER_FRAME || changed) {
-            frameWaiter = 0
-            return true
-        }
-        ++frameWaiter
-        return false
     }
 
     private fun toggleMovingAnimationSprites() {
