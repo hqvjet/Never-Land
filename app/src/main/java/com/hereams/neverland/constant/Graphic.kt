@@ -6,4 +6,6 @@ val DIRECTION_RIGHT = 1
 val DIRECTION_DOWN = 2
 val DIRECTION_LEFT = 3
 val MAX_MOVEMENT_SPRITES_SIZE = 12
-val FPS: Long = 166
+val MAX_FPS: Double = 60.0
+val MAX_UPS:Double = 60.0
+val UPS_PERIOD: Double = 1000 / MAX_UPS

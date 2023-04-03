@@ -4,6 +4,8 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.hereams.neverland.R
 import com.hereams.neverland.gameObjects.view.component.Scene
@@ -16,7 +18,14 @@ class Scene: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
+//        supportActionBar?.hide()
+
+        val window: Window = window
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+
         setContentView(R.layout.activity_scene)
         sceneView = findViewById(R.id.scene)
         scene = sceneView.scene

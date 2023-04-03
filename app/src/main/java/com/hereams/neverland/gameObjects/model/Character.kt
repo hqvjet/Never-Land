@@ -1,5 +1,7 @@
 package com.hereams.neverland.gameObjects.model
 
+import com.hereams.neverland.constant.*
+
 class Character {
 
     private lateinit var player_name: String
@@ -18,8 +20,9 @@ class Character {
     private lateinit var INT: Number
     private lateinit var CRT: Number
     private lateinit var player_move_speed: Number
+    private lateinit var class_id: Number
 
-    private lateinit var player_weapon: Weapon
+    private lateinit var weapon: Weapon
     private lateinit var inventory: Inventory
     private lateinit var option: Option
 
@@ -98,9 +101,9 @@ class Character {
         CRT = value
     }
 
-    fun getWeapon() = player_weapon
+    fun getWeapon() = weapon
     fun setWeapon(value: Weapon) {
-        player_weapon = value
+        weapon = value
     }
 
     fun getInventory() = inventory
@@ -118,22 +121,27 @@ class Character {
         player_move_speed = value
     }
 
+    fun getClassId() = class_id
+    fun setClassId(value: Number) {
+        class_id = value
+    }
+
 
     constructor(
-        name: String, level: Int, exp: Int, char_class: String,
-        floor: Int, savePoint: Int, atk: Int, def: Int, hp: Int,
-        VIT: Int, STR: Int, DEX: Int, INT: Int, CRT: Int, moveS: Float,
+        name: String, level: Int, exp: Int, class_id: Int,
+        floor: Int, savePoint: Int,
+        VIT: Int, STR: Int, DEX: Int, INT: Int, CRT: Int,
         weapon: Weapon, inventory: Inventory, option: Option
     ) {
-        setPlayerName(name)
         setPlayerLevel(level)
+        setClassId(class_id)
         setPlayerExp(exp)
-        setPlayerClass(char_class)
+        setPlayerClass(CLASS_NAME[class_id])
         setCurrentFloor(floor)
         setSavepoint(savePoint)
-        setPlayerAttack(atk)
-        setPlayerDef(def)
-        setPlayerHp(hp)
+        setPlayerAttack(BASE_ATTACK[class_id])
+        setPlayerDef(BASE_DEF[class_id])
+        setPlayerHp(BASE_HP[class_id])
         setVIT(VIT)
         setINT(INT)
         setSTR(STR)
@@ -142,7 +150,7 @@ class Character {
         setWeapon(weapon)
         setInventory(inventory)
         setOption(option)
-        setMoveSpeed(moveS)
+        setMoveSpeed(BASE_MOVE[class_id])
     }
 
 }

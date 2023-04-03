@@ -1,5 +1,6 @@
 package com.hereams.neverland.gameObjects.model
 
+import com.hereams.neverland.constant.*
 import com.hereams.neverland.gameObjects.model.Item
 
 class Weapon : Item {
@@ -9,12 +10,11 @@ class Weapon : Item {
     private var status = false // is wore ?
 
     constructor(
-        name: String, description: String, price: Number,
-        classify: String, discardable: Boolean, tradeable: Boolean,
-        atk: Number, enhance_level: Number
-    ) : super(name, description, price, classify, discardable, tradeable) {
+        weapon_id:Int, enhance_level: Number
+    ) : super(ITEM_NAME[weapon_id], ITEM_DESCRIPTION[weapon_id], ITEM_PRICE[weapon_id],
+        ITEM_CLASSIFY[weapon_id], ITEM_DISCARDABLE[weapon_id], ITEM_TRADEALBE[weapon_id]) {
 
-        setWeaponAttack(atk)
+        setWeaponAttack(ITEM_STAT[weapon_id])
         setEnhanceLevel(enhance_level)
 
     }

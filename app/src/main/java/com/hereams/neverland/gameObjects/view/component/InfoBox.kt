@@ -1,69 +1,42 @@
 package com.hereams.neverland.gameObjects.view.component
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.*
-import android.util.AttributeSet
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import com.hereams.neverland.R
+import com.hereams.neverland.gameObjects.Game
 
-class InfoBox @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+class InfoBox(game: Game) {
 
-//    private lateinit var
+    private val border_paint: Paint = Paint()
+    private val hp_paint: Paint = Paint()
+    private val exp_paint: Paint = Paint()
+    private val background_paint: Paint = Paint()
 
-    private lateinit var hp_bar: ProgressBar
-    private lateinit var mp_bar: ProgressBar
-    private lateinit var exp_bar: ProgressBar
+    private val background_id = 0
+    private val hp_id = 1
+    private val exp_id = 2
 
-    private lateinit var bitmap: Bitmap
+    private val width: Array<Float> = arrayOf(300f, 250f)
+    private val height: Array<Float> = arrayOf(150f, 30f)
+    private val margin_top = 15f
+    private val margin_left = 25f
 
     init {
-        setBackgroundColor(Color.TRANSPARENT)
-
-        hp_bar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
-        hp_bar.max = 100
-        hp_bar.progress = 90
-        hp_bar.progressTintList = ColorStateList.valueOf(Color.RED)
-
-        mp_bar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
-        mp_bar.max = 100
-        mp_bar.progress = 90
-        mp_bar.progressTintList = ColorStateList.valueOf(Color.BLUE)
-
-        exp_bar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
-        exp_bar.max = 100
-        exp_bar.progress = 90
-        exp_bar.progressTintList = ColorStateList.valueOf(Color.GREEN)
-
-        // set the layout parameters for the progress bars
-        val params1 = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        params1.topMargin = 25
-        hp_bar.layoutParams = params1
-
-        val params2 = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        params2.topMargin = 50
-        mp_bar.layoutParams = params2
-
-        val params3 = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        params3.topMargin = 75
-        exp_bar.layoutParams = params3
-
-        // add the progress bars to the view group
-        addView(hp_bar)
-        addView(mp_bar)
-        addView(exp_bar)
-
+        border_paint.color = Color.YELLOW
+        hp_paint.color = Color.RED
+        exp_paint.color = Color.GREEN
+        background_paint.color = Color.WHITE
     }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-//        canvas.drawBitmap(bitmap, 0f, 0f, null)
+    fun draw(canvas: Canvas?) {
+        canvas?.drawRect(0f, 0f, width[background_id], height[background_id], background_paint)
+        canvas?.drawRect(margin_left, margin_top, width[hp_id] + margin_left, height[hp_id] + margin_top, hp_paint)
+        canvas?.drawRect(margin_left, margin_top * 2 + height[hp_id], width[hp_id] + margin_left, margin_top * 2 + height[hp_id] * 2, exp_paint)
+    }
+
+    fun update() {
+
     }
 
 }

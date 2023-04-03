@@ -1,5 +1,6 @@
 package com.hereams.neverland.gameObjects.states
 
+import android.graphics.PointF
 import com.hereams.neverland.gameObjects.view.component.CharacterView
 import kotlin.math.abs
 import kotlin.math.atan
@@ -21,28 +22,28 @@ class CharacterState(private val view: CharacterView) {
 
     fun update() {
         var angle: Float
-
+        val velocity: PointF = view.getObjectVelocity()
         //1 and 3 circle angles
-        if ((view.velocity.x < 0f && view.velocity.y > 0f) || (view.velocity.x > 0f && view.velocity.y < 0f)) {
-            angle = atan(abs(view.velocity.x / view.velocity.y))
+        if ((velocity.x < 0f && velocity.y > 0f) || (velocity.x > 0f && velocity.y < 0f)) {
+            angle = atan(abs(velocity.x / velocity.y))
             if (angle <= Math.PI / 4)
                 state =
-                    if (view.velocity.y < 0f) State.IS_MOVING_DOWN else State.IS_MOVING_FORWARD
+                    if (velocity.y < 0f) State.IS_MOVING_DOWN else State.IS_MOVING_FORWARD
             else
                 state =
-                    if (view.velocity.y < 0f) State.IS_MOVING_RIGHT else State.IS_MOVING_LEFT
-        } else if (view.velocity.x == 0f && view.velocity.y == 0f)
+                    if (velocity.y < 0f) State.IS_MOVING_RIGHT else State.IS_MOVING_LEFT
+        } else if (velocity.x == 0f && velocity.y == 0f)
             state = State.NOT_MOVING
 
         //2 and 4 circle angles
         else {
-            angle = atan(view.velocity.y / view.velocity.x)
+            angle = atan(velocity.y / velocity.x)
             if (angle <= Math.PI / 4)
                 state =
-                    if (view.velocity.x < 0f) State.IS_MOVING_LEFT else State.IS_MOVING_RIGHT
+                    if (velocity.x < 0f) State.IS_MOVING_LEFT else State.IS_MOVING_RIGHT
             else
                 state =
-                    if (view.velocity.x < 0f) State.IS_MOVING_DOWN else State.IS_MOVING_FORWARD
+                    if (velocity.x < 0f) State.IS_MOVING_DOWN else State.IS_MOVING_FORWARD
         }
 
     }
