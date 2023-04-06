@@ -19,6 +19,8 @@
         android:text="Skip Story"
         android:onClick="skip"
         tools:layout_editor_absoluteX="627dp"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:layout_editor_absoluteY="16dp"
+        android:gravity="start"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

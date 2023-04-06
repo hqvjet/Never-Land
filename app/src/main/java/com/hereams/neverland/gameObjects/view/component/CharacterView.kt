@@ -36,13 +36,13 @@ class CharacterView(
     init {
 
         characterForwardMovementSpritesSheet =
-            SpritesSheet(position, context, R.drawable.front_movement, DIRECTION_FORWARD)
+            SpritesSheet(context, R.drawable.character_front_movement, null)
         characterRightMovementSpritesSheet =
-            SpritesSheet(position, context, R.drawable.side_movement, DIRECTION_RIGHT)
+            SpritesSheet(context, R.drawable.character_side_movement, null)
         characterDownMovementSpritesSheet =
-            SpritesSheet(position, context, R.drawable.back_movement, DIRECTION_DOWN)
+            SpritesSheet(context, R.drawable.character_back_movement, null)
         characterLeftMovementSpritesSheet =
-            SpritesSheet(position, context, R.drawable.side_movement, DIRECTION_LEFT)
+            SpritesSheet(context, R.drawable.character_side_movement, DIRECTION_LEFT)
         movementSpritesSheetArray = ArrayList()
         movementSpritesSheetArray.add(characterForwardMovementSpritesSheet)
         movementSpritesSheetArray.add(characterRightMovementSpritesSheet)
@@ -93,7 +93,6 @@ class CharacterView(
 
     override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
         animator.draw(canvas, gameDisplay, this)
-//        healthBar.draw(canvas, gameDisplay)
     }
 
 }

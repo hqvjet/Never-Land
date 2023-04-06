@@ -2,19 +2,16 @@ package com.hereams.neverland.graphics
 
 import android.content.Context
 import android.graphics.*
-import android.view.SurfaceView
 import com.hereams.neverland.R
-import com.hereams.neverland.constant.DIRECTION_FORWARD
 import com.hereams.neverland.constant.DIRECTION_LEFT
 import com.hereams.neverland.constant.MAX_MOVEMENT_SPRITES_SIZE
 import com.hereams.neverland.constant.SPRITES_SIZE
 import kotlin.math.floor
 
 class SpritesSheet(
-    private val position: PointF,
     private val context: Context,
     private val image_id: Int,
-    private val direction: Int
+    private val direction: Number?
 ) {
     private var bitmapOptions: BitmapFactory.Options = BitmapFactory.Options()
     private lateinit var bitmap: Bitmap
@@ -23,7 +20,9 @@ class SpritesSheet(
 
     init {
         bitmapOptions.inScaled = false
-        if (direction != DIRECTION_LEFT) {
+        zoomMatrix.setScale(8f, 8f)
+
+        if (direction == null) {
             bitmap = BitmapFactory.decodeResource(context.resources, image_id, bitmapOptions)
         }
         else {
@@ -51,9 +50,6 @@ class SpritesSheet(
                 true
             )
         }
-
-
-        zoomMatrix.setScale(8f, 8f)
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, zoomMatrix, true)
 
     }
@@ -71,6 +67,12 @@ class SpritesSheet(
             )
         }
         return spritesArray
+    }
+
+    fun getEarthSprites(): Array<Sprites> {
+        return arrayOf(
+            Sprites(this, Rect(SPRITES_SIZE, SPRITES_SIZE, SPRITES_SIZE * 2, SPRITES_SIZE * 2))
+        )
     }
 
     fun getBitmap(): Bitmap {

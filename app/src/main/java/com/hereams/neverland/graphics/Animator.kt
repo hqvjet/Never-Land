@@ -84,6 +84,9 @@ class Animator(
         }
     }
 
+    /**
+     * This function is currently created for character only, for more object using, please update more
+     */
     private fun drawFrame(
         canvas: Canvas?,
         sprites: Sprites,
@@ -92,8 +95,8 @@ class Animator(
     ) {
         sprites.draw(
             canvas, PointF(
-                gameDisplay.gameToDisplayCoordinatesX(character.getObjectPosition().x),
-                gameDisplay.gameToDisplayCoordinatesY(character.getObjectPosition().y)
+                gameDisplay.gameToDisplayCoordinatesX(character.getObjectPosition().x - SPRITES_SIZE / 2f),
+                gameDisplay.gameToDisplayCoordinatesY(character.getObjectPosition().y - SPRITES_SIZE / 2f)
             )
         )
     }

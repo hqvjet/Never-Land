@@ -9,13 +9,17 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.WindowManager
+import com.hereams.neverland.R
 import com.hereams.neverland.constant.Helper
 import com.hereams.neverland.constant.SPRITES_SIZE
 import com.hereams.neverland.gameLoop.GameLoop
 import com.hereams.neverland.gameObjects.view.component.CharacterView
 import com.hereams.neverland.gameObjects.view.component.DPadView
 import com.hereams.neverland.gameObjects.view.component.InfoBox
+import com.hereams.neverland.gameObjects.view.map.TileMap
 import com.hereams.neverland.graphics.GameDisplay
+import com.hereams.neverland.graphics.SpritesSheet
 
 
 /**
@@ -33,6 +37,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private lateinit var character: CharacterView
     private lateinit var dpad: DPadView
     private lateinit var infoBox: InfoBox
+    private lateinit var tile_map: TileMap
 
     //Game loop
     private lateinit var game_loop: GameLoop
@@ -40,6 +45,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private lateinit var game_display: GameDisplay
 
     private var helper = Helper(this)
+
+    //sprite sheets
+    private lateinit var earth_sprite_sheet: SpritesSheet
 
     //parameters
     private var dpadPointerId = 0
@@ -51,30 +59,38 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         game_loop = GameLoop(this, surfaceHolder)
 
+        //init sprite sheets
+        earth_sprite_sheet = SpritesSheet(this.context, R.drawable.sprite_sheet, null)
+
+        //init character, info box and controller
         dpad = DPadView(
             PointF(
-                helper.toDP(500f),
-                helper.toDP(500f)
+                230f, 800f
             ),
-            helper.toDP(80f),
-            helper.toDP(200f)
+            80f, 200f
+        )
+
+        val displayMetrics = DisplayMetrics()
+        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getMetrics(
+            displayMetrics
         )
 
         character = CharacterView(
             context,
             PointF(
-                helper.toDP((width / 2).toFloat()),
-                helper.toDP((height / 2).toFloat())
+                displayMetrics.widthPixels.toFloat() / 2f,
+                displayMetrics.heightPixels.toFloat() / 2f
             ),
-            helper.toDP(SPRITES_SIZE.toFloat()),
+            SPRITES_SIZE.toFloat(),
             dpad
         )
-
         infoBox = InfoBox(this)
 
+        //init tilemap
+        tile_map = TileMap(earth_sprite_sheet)
+
         // Initialize display and center it around the player
-        val displayMetrics = DisplayMetrics()
-        (getContext() as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+
         game_display =
             GameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, character)
     }
@@ -82,10 +98,11 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-//        TODO("implement all own algorithm about movement to all entity's update function")
+        tile_map.draw(canvas, game_display)
         dpad.draw(canvas)
         character.draw(canvas, game_display)
         infoBox.draw(canvas)
+
     }
 
     fun update() {
@@ -95,6 +112,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         dpad.update()
         character.update()
         infoBox.update()
+        game_display.update()
 
     }
 

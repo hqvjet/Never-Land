@@ -5,15 +5,12 @@ import android.graphics.*
 class Sprites(private val spritesSheet: SpritesSheet, private val rect: Rect) {
 
     fun draw(canvas: Canvas?, position: PointF) {
-        canvas?.drawColor(Color.TRANSPARENT)
-        canvas?.save()
         canvas?.drawBitmap(
             spritesSheet.getBitmap(),
             rect,
             RectF(position.x, position.y, position.x + rect.width(), position.y + rect.height()),
             null
         )
-        canvas?.restore()
     }
 
 }
