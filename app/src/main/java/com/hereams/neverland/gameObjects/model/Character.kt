@@ -20,6 +20,7 @@ class Character {
     private lateinit var INT: Number
     private lateinit var CRT: Number
     private lateinit var player_move_speed: Number
+    private lateinit var player_attack_speed: Number
     private lateinit var class_id: Number
 
     private lateinit var weapon: Weapon
@@ -126,6 +127,11 @@ class Character {
         class_id = value
     }
 
+    fun getAttackSpeed() = player_attack_speed
+    fun setAttackSpeed(value: Number) {
+        player_attack_speed = value
+    }
+
 
     constructor(
         name: String, level: Int, exp: Int, class_id: Int,
@@ -151,6 +157,7 @@ class Character {
         setInventory(inventory)
         setOption(option)
         setMoveSpeed(BASE_MOVE[class_id])
+        setAttackSpeed(BASE_ATTACK_SPEED[class_id])
     }
 
 }

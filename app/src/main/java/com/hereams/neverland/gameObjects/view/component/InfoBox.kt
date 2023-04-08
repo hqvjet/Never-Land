@@ -1,12 +1,12 @@
 package com.hereams.neverland.gameObjects.view.component
 
-import android.content.res.ColorStateList
-import android.graphics.*
-import android.widget.FrameLayout
-import android.widget.ProgressBar
-import com.hereams.neverland.gameObjects.Game
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import kotlin.math.max
 
-class InfoBox(game: Game) {
+class InfoBox(context: Context, val owner: CharacterView) {
 
     private val border_paint: Paint = Paint()
     private val hp_paint: Paint = Paint()
@@ -21,6 +21,7 @@ class InfoBox(game: Game) {
     private val height: Array<Float> = arrayOf(150f, 30f)
     private val margin_top = 15f
     private val margin_left = 25f
+    private var hp_scale: Float = 1f
 
     init {
         border_paint.color = Color.YELLOW
@@ -31,12 +32,24 @@ class InfoBox(game: Game) {
 
     fun draw(canvas: Canvas?) {
         canvas?.drawRect(0f, 0f, width[background_id], height[background_id], background_paint)
-        canvas?.drawRect(margin_left, margin_top, width[hp_id] + margin_left, height[hp_id] + margin_top, hp_paint)
-        canvas?.drawRect(margin_left, margin_top * 2 + height[hp_id], width[hp_id] + margin_left, margin_top * 2 + height[hp_id] * 2, exp_paint)
+        canvas?.drawRect(
+            margin_left,
+            margin_top,
+            (width[hp_id] * hp_scale + margin_left),
+            height[hp_id] + margin_top,
+            hp_paint
+        )
+        canvas?.drawRect(
+            margin_left,
+            margin_top * 2 + height[hp_id],
+            width[hp_id] + margin_left,
+            margin_top * 2 + height[hp_id] * 2,
+            exp_paint
+        )
     }
 
     fun update() {
-
+        hp_scale = owner.model.getPlayerHp().toFloat() / owner.getMaxCharacterHP().toFloat()
     }
 
 }

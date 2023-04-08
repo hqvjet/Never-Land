@@ -39,7 +39,7 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
             try {
                 canvas = surfaceHolder.lockCanvas()
                 synchronized(surfaceHolder) {
-                    game.update()
+                    game.update(averageFPS.toFloat())
                     ++updateCount
                     game.draw(canvas)
                     game.invalidate()
@@ -68,25 +68,26 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
                     e.printStackTrace()
                 }
             }
+            // Skip frames to keep up with target UPS
+            while (sleepTime < 0 && updateCount < MAX_UPS - 1) {
+                game.update(averageFPS.toFloat())
+                updateCount++
+                elapsedTime = System.currentTimeMillis() - startTime
+                sleepTime = (updateCount * UPS_PERIOD - elapsedTime).toLong()
+            }
+
+            // Calculate average UPS and FPS
+            elapsedTime = System.currentTimeMillis() - startTime;
+            if (elapsedTime >= 1000) {
+                averageUPS = updateCount / (1E-3 * elapsedTime);
+                averageFPS = frameCount / (1E-3 * elapsedTime);
+                updateCount = 0;
+                frameCount = 0;
+                startTime = System.currentTimeMillis();
+            }
         }
 
-        // Skip frames to keep up with target UPS
-        while (sleepTime < 0 && updateCount < MAX_UPS - 1) {
-            game.update()
-            updateCount++
-            elapsedTime = System.currentTimeMillis() - startTime
-            sleepTime = (updateCount * UPS_PERIOD - elapsedTime).toLong()
-        }
 
-        // Calculate average UPS and FPS
-        elapsedTime = System.currentTimeMillis() - startTime;
-        if (elapsedTime >= 1000) {
-            averageUPS = updateCount / (1E-3 * elapsedTime);
-            averageFPS = frameCount / (1E-3 * elapsedTime);
-            updateCount = 0;
-            frameCount = 0;
-            startTime = System.currentTimeMillis();
-        }
     }
 
     fun stopLoop() {

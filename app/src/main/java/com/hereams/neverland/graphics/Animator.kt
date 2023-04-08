@@ -3,11 +3,11 @@ package com.hereams.neverland.graphics
 import android.graphics.Canvas
 import android.graphics.PointF
 import com.hereams.neverland.constant.*
-import com.hereams.neverland.gameObjects.states.CharacterState
-import com.hereams.neverland.gameObjects.view.component.CharacterView
+import com.hereams.neverland.gameObjects.GameObject
+import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 
 class Animator(
-    private val characterMovementSpritesArray: ArrayList<SpritesSheet>
+    private val object_movement_sprites_array: ArrayList<SpritesSheet>
 ) {
 
     private var frameIndex = 0
@@ -19,18 +19,18 @@ class Animator(
 
     init {
         characterForwardMovementSpritesArray =
-            characterMovementSpritesArray[0].getCharacterMovementSpritesArray()
+            object_movement_sprites_array[0].getCharacterMovementSpritesArray()
         characterRightMovementSpritesArray =
-            characterMovementSpritesArray[1].getCharacterMovementSpritesArray()
+            object_movement_sprites_array[1].getCharacterMovementSpritesArray()
         characterDownMovementSpritesArray =
-            characterMovementSpritesArray[2].getCharacterMovementSpritesArray()
+            object_movement_sprites_array[2].getCharacterMovementSpritesArray()
         characterLeftMovementSpritesArray =
-            characterMovementSpritesArray[3].getCharacterMovementSpritesArray()
+            object_movement_sprites_array[3].getCharacterMovementSpritesArray()
     }
 
-    fun draw(canvas: Canvas?, gameDisplay: GameDisplay, character: CharacterView) {
-        when (character.getState()) {
-            CharacterState.State.NOT_MOVING -> {
+    fun draw(canvas: Canvas?, gameDisplay: GameDisplay, drawn_object: GameObject) {
+        when (drawn_object.getState()) {
+            LivingAnimationObjectState.State.NOT_MOVING -> {
                 drawFrame(
                     canvas,
                     if (direction == DIRECTION_FORWARD) characterForwardMovementSpritesArray[0]
@@ -38,45 +38,45 @@ class Animator(
                     else if (direction == DIRECTION_RIGHT) characterRightMovementSpritesArray[0]
                     else characterLeftMovementSpritesArray[0],
                     gameDisplay,
-                    character
+                    drawn_object
                 )
             }
-            CharacterState.State.IS_MOVING_RIGHT -> {
+            LivingAnimationObjectState.State.IS_MOVING_RIGHT -> {
                 direction = DIRECTION_RIGHT
                 drawFrame(
                     canvas, characterRightMovementSpritesArray[frameIndex],
                     gameDisplay,
-                    character
+                    drawn_object
                 )
                 toggleMovingAnimationSprites()
 
             }
-            CharacterState.State.IS_MOVING_FORWARD -> {
+            LivingAnimationObjectState.State.IS_MOVING_FORWARD -> {
                 direction = DIRECTION_FORWARD
                 drawFrame(
                     canvas, characterForwardMovementSpritesArray[frameIndex],
                     gameDisplay,
-                    character
+                    drawn_object
                 )
                 toggleMovingAnimationSprites()
 
             }
-            CharacterState.State.IS_MOVING_LEFT -> {
+            LivingAnimationObjectState.State.IS_MOVING_LEFT -> {
                 direction = DIRECTION_LEFT
                 drawFrame(
                     canvas, characterLeftMovementSpritesArray[frameIndex],
                     gameDisplay,
-                    character
+                    drawn_object
                 )
                 toggleMovingAnimationSprites()
 
             }
-            CharacterState.State.IS_MOVING_DOWN -> {
+            LivingAnimationObjectState.State.IS_MOVING_DOWN -> {
                 direction = DIRECTION_DOWN
                 drawFrame(
                     canvas, characterDownMovementSpritesArray[frameIndex],
                     gameDisplay,
-                    character
+                    drawn_object
                 )
                 toggleMovingAnimationSprites()
 
@@ -91,18 +91,18 @@ class Animator(
         canvas: Canvas?,
         sprites: Sprites,
         gameDisplay: GameDisplay,
-        character: CharacterView
+        drawn_object: GameObject
     ) {
         sprites.draw(
             canvas, PointF(
-                gameDisplay.gameToDisplayCoordinatesX(character.getObjectPosition().x - SPRITES_SIZE / 2f),
-                gameDisplay.gameToDisplayCoordinatesY(character.getObjectPosition().y - SPRITES_SIZE / 2f)
+                gameDisplay.gameToDisplayCoordinatesX(drawn_object.getObjectPosition().x - SPRITES_SIZE / 2f),
+                gameDisplay.gameToDisplayCoordinatesY(drawn_object.getObjectPosition().y - SPRITES_SIZE / 2f)
             )
         )
     }
 
     private fun toggleMovingAnimationSprites() {
-        if (frameIndex == MAX_MOVEMENT_SPRITES_SIZE - 1)
+        if (frameIndex == MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER - 1)
             frameIndex = 0
         ++frameIndex
     }

@@ -14,7 +14,7 @@ abstract class Circle(
     var radius: Float
 ) : GameObject(position) {
 
-    protected var paint: Paint = Paint()
+    private var paint: Paint = Paint()
 
     init {
 
@@ -24,15 +24,15 @@ abstract class Circle(
 
     override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
         canvas?.drawCircle(
-            gameDisplay.gameToDisplayCoordinatesX(position.x) as Float,
-            gameDisplay.gameToDisplayCoordinatesY(position.y) as Float, radius,
+            gameDisplay.gameToDisplayCoordinatesX(position.x),
+            gameDisplay.gameToDisplayCoordinatesY(position.y), radius,
             paint
         )
     }
 
     companion object {
         /**
-         * isColliding checks if two circle objects are colliding, based on their positions and radii.
+         * isColliding checks if two circle objects are colliding, based on their positions and radius.
          * @param obj1
          * @param obj2
          * @return

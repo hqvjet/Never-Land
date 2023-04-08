@@ -2,6 +2,7 @@ package com.hereams.neverland.gameObjects
 
 import android.graphics.Canvas
 import android.graphics.PointF
+import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.graphics.GameDisplay
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -27,7 +28,8 @@ abstract class GameObject {
     }
 
     abstract fun draw(canvas: Canvas?, gameDisplay: GameDisplay)
-    abstract fun update()
+    abstract fun update(fps: Float)
+    abstract fun getState(): LivingAnimationObjectState.State
 
     companion object {
         /**

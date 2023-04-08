@@ -6,11 +6,12 @@ import android.graphics.Color
 import android.graphics.PointF
 import com.hereams.neverland.R
 import com.hereams.neverland.constant.*
+import com.hereams.neverland.gameLoop.controller.thread.AttackController
 import com.hereams.neverland.gameObjects.model.Character
 import com.hereams.neverland.gameObjects.model.Inventory
 import com.hereams.neverland.gameObjects.model.Option
 import com.hereams.neverland.gameObjects.model.Weapon
-import com.hereams.neverland.gameObjects.states.CharacterState
+import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.graphics.Animator
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
@@ -28,21 +29,23 @@ class CharacterView(
     private lateinit var characterDownMovementSpritesSheet: SpritesSheet
     private lateinit var movementSpritesSheetArray: ArrayList<SpritesSheet>
     lateinit var animator: Animator
-    lateinit var state: CharacterState
+    lateinit var state: LivingAnimationObjectState
     private lateinit var MAX_SPEED: Number
+    private lateinit var MAX_HP: Number
 
     lateinit var model: Character
+    lateinit var atk_controller: AttackController
 
     init {
 
         characterForwardMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_front_movement, null)
+            SpritesSheet(context, R.drawable.character_front_movement, null, CHARACTER)
         characterRightMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_side_movement, null)
+            SpritesSheet(context, R.drawable.character_side_movement, null, CHARACTER)
         characterDownMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_back_movement, null)
+            SpritesSheet(context, R.drawable.character_back_movement, null, CHARACTER)
         characterLeftMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_side_movement, DIRECTION_LEFT)
+            SpritesSheet(context, R.drawable.character_side_movement, DIRECTION_LEFT, CHARACTER)
         movementSpritesSheetArray = ArrayList()
         movementSpritesSheetArray.add(characterForwardMovementSpritesSheet)
         movementSpritesSheetArray.add(characterRightMovementSpritesSheet)
@@ -50,7 +53,7 @@ class CharacterView(
         movementSpritesSheetArray.add(characterLeftMovementSpritesSheet)
 
         animator = Animator(movementSpritesSheetArray)
-        state = CharacterState(this)
+        state = LivingAnimationObjectState(this)
         model = Character(
             "Jack", 1, 1, KNIGHT, 1, 1,
             1, 1, 1, 1, 1,
@@ -59,15 +62,21 @@ class CharacterView(
             Option(EN, "jacky", "1231233")
         )
 
-        MAX_SPEED = model.getMoveSpeed()
+        atk_controller = AttackController(model.getAttackSpeed().toFloat(), this)
 
+        MAX_SPEED = model.getMoveSpeed()
+        MAX_HP = model.getPlayerHp()
     }
 
-    fun getState(): CharacterState.State {
+    override fun getState(): LivingAnimationObjectState.State {
         return state.getState()
     }
 
-    override fun update() {
+    fun getMaxCharacterHP(): Int {
+        return MAX_HP.toInt()
+    }
+
+    override fun update(fps: Float) {
 
         // Update velocity based on actuator of d_pad
         velocity.x = d_pad.getActuatorX() * MAX_SPEED.toFloat()
@@ -86,13 +95,16 @@ class CharacterView(
             println(distance)
         }
 
-//        println("${velocity.x} ${velocity.y}")
-
         state.update()
     }
 
     override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
         animator.draw(canvas, gameDisplay, this)
+    }
+
+    fun isAttacked(damaged: Int) {
+        model.setPlayerHp(model.getPlayerHp().toInt() - damaged)
+        println("hittttttttttttttttttttttttttttttttt: ${model.getPlayerHp().toFloat() / MAX_HP.toFloat()}")
     }
 
 }

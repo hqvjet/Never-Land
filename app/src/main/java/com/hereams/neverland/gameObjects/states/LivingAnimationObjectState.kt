@@ -1,11 +1,13 @@
 package com.hereams.neverland.gameObjects.states
 
 import android.graphics.PointF
+import com.hereams.neverland.gameObjects.Game
+import com.hereams.neverland.gameObjects.GameObject
 import com.hereams.neverland.gameObjects.view.component.CharacterView
 import kotlin.math.abs
 import kotlin.math.atan
 
-class CharacterState(private val view: CharacterView) {
+class LivingAnimationObjectState(private val view: GameObject) {
     enum class State {
         NOT_MOVING, IS_MOVING_RIGHT, IS_MOVING_DOWN, IS_MOVING_FORWARD, IS_MOVING_LEFT
     }

@@ -1,26 +1,24 @@
 package com.hereams.neverland.gameObjects.view.map
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Rect
-import com.hereams.neverland.R
 import com.hereams.neverland.constant.SPRITES_SIZE
+import com.hereams.neverland.gameObjects.view.component.EnemyView
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
 
-class TileMap(val spritesSheet: SpritesSheet) {
+class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
 
-    private final var map_layout: TheHallWay = TheHallWay()
     private lateinit var map: Bitmap
     private lateinit var row: Number
     private lateinit var column: Number
     private lateinit var tile_map: Array<Array<Tile?>>
+    private lateinit var enemy: Array<EnemyView>
 
     init {
         initializeTileMap()
+        enemy = map_layout.getEnemy()
     }
 
     private fun initializeTileMap() {
@@ -73,5 +71,8 @@ class TileMap(val spritesSheet: SpritesSheet) {
         )
     }
 
+    fun getEnemy(): Array<EnemyView> {
+        return enemy
+    }
 
 }

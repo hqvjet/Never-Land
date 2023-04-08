@@ -21,7 +21,6 @@ class GameDisplay(
     }
 
     fun update() {
-        println("$widthPixels, $heightPixels")
         gameCenter = centerObject?.getObjectPosition()!!
         gameToDisplayCoordinatesOffset =
             PointF(displayCenter.x - gameCenter.x, displayCenter.y - gameCenter.y)

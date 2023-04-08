@@ -8,7 +8,8 @@ val CLASS_NAME = arrayOf("Knight", "Warrior", "Assassin")
 val BASE_ATTACK = arrayOf(7, 5, 10)
 val BASE_DEF = arrayOf(7, 10, 5)
 val BASE_HP = arrayOf(100, 150, 80)
-val BASE_MOVE = arrayOf(3f, 1f, 3f)
+val BASE_MOVE = arrayOf(10f, 1f, 3f)
+val BASE_ATTACK_SPEED = arrayOf(1f, 0.5f, 2f)
 
 val STAT_BONUS_PER_LEVEL = 0.5
 

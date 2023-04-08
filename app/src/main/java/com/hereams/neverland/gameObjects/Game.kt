@@ -1,6 +1,5 @@
 package com.hereams.neverland.gameObjects
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -11,12 +10,13 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.WindowManager
 import com.hereams.neverland.R
+import com.hereams.neverland.constant.CIRCLE_RADIUS
 import com.hereams.neverland.constant.Helper
 import com.hereams.neverland.constant.SPRITES_SIZE
+import com.hereams.neverland.constant.TILEMAP
 import com.hereams.neverland.gameLoop.GameLoop
-import com.hereams.neverland.gameObjects.view.component.CharacterView
-import com.hereams.neverland.gameObjects.view.component.DPadView
-import com.hereams.neverland.gameObjects.view.component.InfoBox
+import com.hereams.neverland.gameObjects.view.component.*
+import com.hereams.neverland.gameObjects.view.map.TheHallWay
 import com.hereams.neverland.gameObjects.view.map.TileMap
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
@@ -34,10 +34,11 @@ import com.hereams.neverland.graphics.SpritesSheet
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     //Entities
-    private lateinit var character: CharacterView
+    lateinit var character: CharacterView
     private lateinit var dpad: DPadView
     private lateinit var infoBox: InfoBox
     private lateinit var tile_map: TileMap
+    lateinit var enemy_list: Array<EnemyView>
 
     //Game loop
     private lateinit var game_loop: GameLoop
@@ -48,6 +49,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     //sprite sheets
     private lateinit var earth_sprite_sheet: SpritesSheet
+
+    //maps
+    private lateinit var the_hall_way: TheHallWay
 
     //parameters
     private var dpadPointerId = 0
@@ -60,7 +64,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         game_loop = GameLoop(this, surfaceHolder)
 
         //init sprite sheets
-        earth_sprite_sheet = SpritesSheet(this.context, R.drawable.sprite_sheet, null)
+        earth_sprite_sheet = SpritesSheet(this.context, R.drawable.sprite_sheet, null, TILEMAP)
 
         //init character, info box and controller
         dpad = DPadView(
@@ -81,13 +85,15 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
                 displayMetrics.widthPixels.toFloat() / 2f,
                 displayMetrics.heightPixels.toFloat() / 2f
             ),
-            SPRITES_SIZE.toFloat(),
+            CIRCLE_RADIUS,
             dpad
         )
-        infoBox = InfoBox(this)
+        infoBox = InfoBox(this.context, character)
 
-        //init tilemap
-        tile_map = TileMap(earth_sprite_sheet)
+        //init maps, tilemap with enemies inside
+        the_hall_way = TheHallWay(this.context, character)
+        tile_map = TileMap(earth_sprite_sheet, the_hall_way)
+        enemy_list = tile_map.getEnemy()
 
         // Initialize display and center it around the player
 
@@ -98,21 +104,35 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
+        //the latest drawn  entity will appear first
         tile_map.draw(canvas, game_display)
+
+        for (i in enemy_list.indices)
+            enemy_list[i].draw(canvas, game_display)
+
         dpad.draw(canvas)
         character.draw(canvas, game_display)
         infoBox.draw(canvas)
 
     }
 
-    fun update() {
+    fun update(fps: Float) {
 
         //Update game state
 
+        for (i in enemy_list.indices)
+            enemy_list[i].update(fps)
+
         dpad.update()
-        character.update()
+        character.update(fps)
         infoBox.update()
         game_display.update()
+
+        for (i in enemy_list.indices)
+            if (Circle.isColliding(character, enemy_list[i]) && enemy_list[i].ready_to_attack) {
+                character.isAttacked(enemy_list[i].model.getEnemyAttack().toInt())
+                enemy_list[i].ready_to_attack = false
+            }
 
     }
 
@@ -120,6 +140,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         game_loop.stopLoop()
     }
 
+    /**
+     * function for init threads
+     */
     override fun surfaceCreated(holder: SurfaceHolder) {
         if (game_loop.state.equals(Thread.State.TERMINATED)) {
             val surfaceHolder = getHolder()
