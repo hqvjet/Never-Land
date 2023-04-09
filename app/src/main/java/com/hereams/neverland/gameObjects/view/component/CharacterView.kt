@@ -15,6 +15,7 @@ import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.graphics.Animator
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
+import kotlin.math.max
 
 class CharacterView(
     context: Context, position: PointF,
@@ -27,6 +28,10 @@ class CharacterView(
     private lateinit var characterRightMovementSpritesSheet: SpritesSheet
     private lateinit var characterLeftMovementSpritesSheet: SpritesSheet
     private lateinit var characterDownMovementSpritesSheet: SpritesSheet
+    private lateinit var characterForwardAttackSpritesSheet: SpritesSheet
+    private lateinit var characterRightAttackSpritesSheet: SpritesSheet
+    private lateinit var characterLeftAttackSpritesSheet: SpritesSheet
+    private lateinit var characterDownAttackSpritesSheet: SpritesSheet
     private lateinit var movementSpritesSheetArray: ArrayList<SpritesSheet>
     lateinit var animator: Animator
     lateinit var state: LivingAnimationObjectState
@@ -39,18 +44,62 @@ class CharacterView(
     init {
 
         characterForwardMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_front_movement, null, CHARACTER)
+            SpritesSheet(context, R.drawable.character_front_movement, null, MOVE_SPRITE, CHARACTER)
         characterRightMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_side_movement, null, CHARACTER)
+            SpritesSheet(context, R.drawable.character_side_movement, null, MOVE_SPRITE, CHARACTER)
         characterDownMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_back_movement, null, CHARACTER)
+            SpritesSheet(context, R.drawable.character_back_movement, null, MOVE_SPRITE, CHARACTER)
         characterLeftMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_side_movement, DIRECTION_LEFT, CHARACTER)
+            SpritesSheet(
+                context,
+                R.drawable.character_side_movement,
+                DIRECTION_LEFT,
+                MOVE_SPRITE,
+                CHARACTER
+            )
+
+        characterForwardAttackSpritesSheet =
+            SpritesSheet(
+                context,
+                R.drawable.character_front_consecutive_slash,
+                null,
+                ATTACK_SPRITE,
+                CHARACTER
+            )
+        characterRightAttackSpritesSheet =
+            SpritesSheet(
+                context,
+                R.drawable.character_side_consecutive_slash,
+                null,
+                ATTACK_SPRITE,
+                CHARACTER
+            )
+        characterDownAttackSpritesSheet =
+            SpritesSheet(
+                context,
+                R.drawable.character_back_consecutive_slash,
+                null,
+                ATTACK_SPRITE,
+                CHARACTER
+            )
+        characterLeftAttackSpritesSheet =
+            SpritesSheet(
+                context,
+                R.drawable.character_side_consecutive_slash,
+                DIRECTION_LEFT,
+                ATTACK_SPRITE,
+                CHARACTER
+            )
+
         movementSpritesSheetArray = ArrayList()
         movementSpritesSheetArray.add(characterForwardMovementSpritesSheet)
         movementSpritesSheetArray.add(characterRightMovementSpritesSheet)
         movementSpritesSheetArray.add(characterDownMovementSpritesSheet)
         movementSpritesSheetArray.add(characterLeftMovementSpritesSheet)
+        movementSpritesSheetArray.add(characterForwardAttackSpritesSheet)
+        movementSpritesSheetArray.add(characterRightAttackSpritesSheet)
+        movementSpritesSheetArray.add(characterDownAttackSpritesSheet)
+        movementSpritesSheetArray.add(characterLeftAttackSpritesSheet)
 
         animator = Animator(movementSpritesSheetArray)
         state = LivingAnimationObjectState(this)
@@ -96,6 +145,7 @@ class CharacterView(
         }
 
         state.update()
+        animator.update(fps)
     }
 
     override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
@@ -103,8 +153,7 @@ class CharacterView(
     }
 
     fun isAttacked(damaged: Int) {
-        model.setPlayerHp(model.getPlayerHp().toInt() - damaged)
-        println("hittttttttttttttttttttttttttttttttt: ${model.getPlayerHp().toFloat() / MAX_HP.toFloat()}")
+        model.setPlayerHp(max(0f, model.getPlayerHp().toInt() - damaged.toFloat()))
     }
 
 }

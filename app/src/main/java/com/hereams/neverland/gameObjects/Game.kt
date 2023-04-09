@@ -64,7 +64,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         game_loop = GameLoop(this, surfaceHolder)
 
         //init sprite sheets
-        earth_sprite_sheet = SpritesSheet(this.context, R.drawable.sprite_sheet, null, TILEMAP)
+        earth_sprite_sheet = SpritesSheet(this.context, R.drawable.sprite_sheet, null, null, TILEMAP)
 
         //init character, info box and controller
         dpad = DPadView(

@@ -1,9 +1,7 @@
 package com.hereams.neverland.gameObjects.states
 
 import android.graphics.PointF
-import com.hereams.neverland.gameObjects.Game
 import com.hereams.neverland.gameObjects.GameObject
-import com.hereams.neverland.gameObjects.view.component.CharacterView
 import kotlin.math.abs
 import kotlin.math.atan
 

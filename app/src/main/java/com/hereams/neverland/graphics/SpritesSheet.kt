@@ -10,6 +10,7 @@ class SpritesSheet(
     private val context: Context,
     private val image_id: Int,
     private val direction: Number?,
+    private val binding_condition: String?,
     private val serving_object: Int
 ) {
     private var bitmapOptions: BitmapFactory.Options = BitmapFactory.Options()
@@ -24,8 +25,7 @@ class SpritesSheet(
         if (serving_object == CHARACTER || serving_object == ENEMY || serving_object == TILEMAP) {
             if (direction == null) {
                 bitmap = BitmapFactory.decodeResource(context.resources, image_id, bitmapOptions)
-            }
-            else {
+            } else {
                 val bitmapRight: Bitmap = BitmapFactory.decodeResource(
                     context.resources,
                     image_id,
@@ -58,13 +58,15 @@ class SpritesSheet(
 
     fun getCharacterMovementSpritesArray(): Array<Sprites> {
 
+        val fixed: Int = if (binding_condition == MOVE_SPRITE) 1 else 0
+
         val spritesArray = Array(MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER) { i ->
             Sprites(
                 this, Rect(
-                    (i % (MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER / 2)) * SPRITES_SIZE,
-                    (floor(i.toFloat() / (MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER / 2)) - 1).toInt(),
-                    ((i % (MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER / 2)) + 1) * SPRITES_SIZE,
-                    SPRITES_SIZE
+                    (i % MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER) * SPRITES_SIZE,
+                    fixed * SPRITES_SIZE,
+                    (i % MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER + 1) * SPRITES_SIZE,
+                    (fixed + 1) * SPRITES_SIZE
                 )
             )
         }

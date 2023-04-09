@@ -5,8 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PointF
 import com.hereams.neverland.R
-import com.hereams.neverland.constant.DIRECTION_LEFT
-import com.hereams.neverland.constant.ENEMY
+import com.hereams.neverland.constant.*
 import com.hereams.neverland.gameLoop.controller.thread.AttackController
 import com.hereams.neverland.gameObjects.model.Enemy
 import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
@@ -29,6 +28,10 @@ class EnemyView(
     private lateinit var characterRightMovementSpritesSheet: SpritesSheet
     private lateinit var characterLeftMovementSpritesSheet: SpritesSheet
     private lateinit var characterDownMovementSpritesSheet: SpritesSheet
+    private lateinit var characterForwardAttackSpritesSheet: SpritesSheet
+    private lateinit var characterRightAttackSpritesSheet: SpritesSheet
+    private lateinit var characterLeftAttackSpritesSheet: SpritesSheet
+    private lateinit var characterDownAttackSpritesSheet: SpritesSheet
     private lateinit var movementSpritesSheetArray: ArrayList<SpritesSheet>
 
     lateinit var state: LivingAnimationObjectState
@@ -42,18 +45,62 @@ class EnemyView(
 
     init {
         characterForwardMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_front_movement, null, ENEMY)
+            SpritesSheet(context, R.drawable.character_front_movement, null, MOVE_SPRITE, ENEMY)
         characterRightMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_side_movement, null, ENEMY)
+            SpritesSheet(context, R.drawable.character_side_movement, null, MOVE_SPRITE, ENEMY)
         characterDownMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_back_movement, null, ENEMY)
+            SpritesSheet(context, R.drawable.character_back_movement, null, MOVE_SPRITE, ENEMY)
         characterLeftMovementSpritesSheet =
-            SpritesSheet(context, R.drawable.character_side_movement, DIRECTION_LEFT, ENEMY)
+            SpritesSheet(
+                context,
+                R.drawable.character_side_movement,
+                DIRECTION_LEFT,
+                MOVE_SPRITE,
+                ENEMY
+            )
+
+        characterForwardAttackSpritesSheet =
+            SpritesSheet(
+                context,
+                R.drawable.character_front_consecutive_slash,
+                null,
+                ATTACK_SPRITE,
+                ENEMY
+            )
+        characterRightAttackSpritesSheet =
+            SpritesSheet(
+                context,
+                R.drawable.character_side_consecutive_slash,
+                null,
+                ATTACK_SPRITE,
+                ENEMY
+            )
+        characterDownAttackSpritesSheet =
+            SpritesSheet(
+                context,
+                R.drawable.character_back_consecutive_slash,
+                null,
+                ATTACK_SPRITE,
+                ENEMY
+            )
+        characterLeftAttackSpritesSheet =
+            SpritesSheet(
+                context,
+                R.drawable.character_side_consecutive_slash,
+                DIRECTION_LEFT,
+                ATTACK_SPRITE,
+                ENEMY
+            )
+
         movementSpritesSheetArray = ArrayList()
         movementSpritesSheetArray.add(characterForwardMovementSpritesSheet)
         movementSpritesSheetArray.add(characterRightMovementSpritesSheet)
         movementSpritesSheetArray.add(characterDownMovementSpritesSheet)
         movementSpritesSheetArray.add(characterLeftMovementSpritesSheet)
+        movementSpritesSheetArray.add(characterForwardAttackSpritesSheet)
+        movementSpritesSheetArray.add(characterRightAttackSpritesSheet)
+        movementSpritesSheetArray.add(characterDownAttackSpritesSheet)
+        movementSpritesSheetArray.add(characterLeftAttackSpritesSheet)
 
         animator = Animator(movementSpritesSheetArray)
 
@@ -71,7 +118,6 @@ class EnemyView(
 
     override fun update(fps: Float) {
         FPS = fps
-//        println(fps)
         if (!ready_to_attack)
             ++count
         if (count >= FPS / model.getAttackSpeed().toFloat()) {
@@ -105,12 +151,11 @@ class EnemyView(
         // =========================================================================================
         //   Update position of the enemy
         // =========================================================================================
-
-        // =========================================================================================
-        //   Update position of the enemy
-        // =========================================================================================
         position.x += velocity.x
         position.y += velocity.y
+
+        state.update()
+        animator.update(fps)
     }
 
     override fun getState(): LivingAnimationObjectState.State {

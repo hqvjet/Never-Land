@@ -17,6 +17,10 @@ class Animator(
     private lateinit var characterLeftMovementSpritesArray: Array<Sprites>
     private var direction: Int = DIRECTION_FORWARD
 
+    private var FPS: Float = 0f
+    private var count: Int = 0
+    private var UPDATE_DELAY: Int = 5
+
     init {
         characterForwardMovementSpritesArray =
             object_movement_sprites_array[0].getCharacterMovementSpritesArray()
@@ -28,7 +32,13 @@ class Animator(
             object_movement_sprites_array[3].getCharacterMovementSpritesArray()
     }
 
+    fun update(fps: Float) {
+        FPS = fps
+    }
+
     fun draw(canvas: Canvas?, gameDisplay: GameDisplay, drawn_object: GameObject) {
+
+        ++count
         when (drawn_object.getState()) {
             LivingAnimationObjectState.State.NOT_MOVING -> {
                 drawFrame(
@@ -102,9 +112,12 @@ class Animator(
     }
 
     private fun toggleMovingAnimationSprites() {
-        if (frameIndex == MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER - 1)
-            frameIndex = 0
-        ++frameIndex
+        if(count >= UPDATE_DELAY) {
+            if (frameIndex == MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER - 1)
+                frameIndex = 0
+            ++frameIndex
+            count = 0
+        }
     }
 
 }
