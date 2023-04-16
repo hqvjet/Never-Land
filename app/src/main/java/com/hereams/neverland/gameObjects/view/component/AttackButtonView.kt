@@ -64,16 +64,11 @@ class AttackButtonView(
         when (event!!.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 //touched in attack button range
-                if (!getIsPressed() && isPressed(touched_position)) {
-                    if (character.readyToAttack() && !character.isAttacking()) {
-                        character.setIsAttacking(true)
-                    }
                     setIsPressed(true)
                     changeBackgroundColor(Color.RED)
 
                     postInvalidate()
                     drawButton()
-                }
 
                 return true
             }

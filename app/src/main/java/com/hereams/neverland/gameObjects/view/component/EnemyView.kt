@@ -177,6 +177,13 @@ class EnemyView(
         target.isDamaged(model.getEnemyAttack().toInt())
     }
 
+    fun move() {
+        if (!is_attacking) {
+            action = ACTION_MOVE
+            state.update()
+        }
+    }
+
     fun isDamaged(damage: Int) {
         model.setEnemyHp(max(0f, (model.getEnemyHp().toInt() - damage).toFloat()))
         hp_bar.update()

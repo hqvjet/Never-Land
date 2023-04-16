@@ -116,15 +116,15 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
 
             //character is in range of enemy[i] attack
             if (Circle.isColliding(character, enemy_list[i]) && enemy_list[i].readyToAttack()) {
-                enemy_list[i].attack(character)
-                enemy_list[i].setReadyToAttack(false)
+                    enemy_list[i].attack(character)
+                    enemy_list[i].setReadyToAttack(false)
+                    enemy_list[i].setIsAttacking(true)
             }
 
-            //enemy[i] is in range of character attack
-//            if (Circle.isColliding(character, enemy_list[i]) && character.readyToAttack()) {
-//                character.attack(enemy_list[i])
-////                character.setAttackState(false)
-//            }
+            else if(!Circle.isColliding(character, enemy_list[i]) && !enemy_list[i].readyToAttack()) {
+                enemy_list[i].move()
+            }
+
         }
 
         if(character.readyToAttack() && atk_btn.getIsPressed()) {
@@ -132,6 +132,8 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
             for (i in enemy_list.indices) {
                 if (Circle.isColliding(character, enemy_list[i])) {
                     character.attack(enemy_list[i])
+                    character.setReadyToAttack(false)
+                    character.setIsAttacking(true)
                 }
             }
 

@@ -5,6 +5,7 @@ import android.graphics.PointF
 import com.hereams.neverland.constant.*
 import com.hereams.neverland.gameObjects.GameObject
 import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
+import com.hereams.neverland.gameObjects.view.component.CharacterView
 import com.hereams.neverland.gameObjects.view.component.EnemyView
 
 class Animator(
@@ -73,81 +74,81 @@ class Animator(
 
             //moving
             LivingAnimationObjectState.State.IS_MOVING_RIGHT -> {
+                toggleMovingAnimationSprites()
                 drawn_object.setDirection(LivingAnimationObjectState.State.IS_MOVING_RIGHT)
                 drawFrame(
                     canvas, objectRightMovementSpritesArray[frameIndex],
                     gameDisplay,
                     drawn_object
                 )
-                toggleMovingAnimationSprites()
 
             }
             LivingAnimationObjectState.State.IS_MOVING_FORWARD -> {
+                toggleMovingAnimationSprites()
                 drawn_object.setDirection(LivingAnimationObjectState.State.IS_MOVING_FORWARD)
                 drawFrame(
                     canvas, objectForwardMovementSpritesArray[frameIndex],
                     gameDisplay,
                     drawn_object
                 )
-                toggleMovingAnimationSprites()
 
             }
             LivingAnimationObjectState.State.IS_MOVING_LEFT -> {
+                toggleMovingAnimationSprites()
                 drawn_object.setDirection(LivingAnimationObjectState.State.IS_MOVING_LEFT)
                 drawFrame(
                     canvas, objectLeftMovementSpritesArray[frameIndex],
                     gameDisplay,
                     drawn_object
                 )
-                toggleMovingAnimationSprites()
 
             }
             LivingAnimationObjectState.State.IS_MOVING_DOWN -> {
+                toggleMovingAnimationSprites()
                 drawn_object.setDirection(LivingAnimationObjectState.State.IS_MOVING_DOWN)
                 drawFrame(
                     canvas, objectDownMovementSpritesArray[frameIndex],
                     gameDisplay,
                     drawn_object
                 )
-                toggleMovingAnimationSprites()
 
             }
 
             //attacking
             LivingAnimationObjectState.State.IS_ATTACKING_RIGHT -> {
+                handleAttackAnimationSprites(drawn_object)
                 drawFrame(
                     canvas, objectRightAttackSpritesArray[frameIndex],
                     gameDisplay,
                     drawn_object
                 )
-                handleAttackAnimationSprites(drawn_object)
 
             }
             LivingAnimationObjectState.State.IS_ATTACKING_FORWARD -> {
+                handleAttackAnimationSprites(drawn_object)
                 drawFrame(
                     canvas, objectForwardAttackSpritesArray[frameIndex],
                     gameDisplay,
                     drawn_object
                 )
-                handleAttackAnimationSprites(drawn_object)
 
             }
             LivingAnimationObjectState.State.IS_ATTACKING_LEFT -> {
+                handleAttackAnimationSprites(drawn_object)
                 drawFrame(
                     canvas, objectLeftAttackSpritesArray[frameIndex],
                     gameDisplay,
                     drawn_object
                 )
-                handleAttackAnimationSprites(drawn_object)
 
             }
             LivingAnimationObjectState.State.IS_ATTACKING_DOWN -> {
+                handleAttackAnimationSprites(drawn_object)
                 drawFrame(
                     canvas, objectDownAttackSpritesArray[frameIndex],
                     gameDisplay,
                     drawn_object
                 )
-                handleAttackAnimationSprites(drawn_object)
 
             }
         }
@@ -173,26 +174,26 @@ class Animator(
 
     private fun toggleMovingAnimationSprites() {
         if (count >= MOVE_UPDATE_DELAY) {
-            if (frameIndex == MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER - 1)
-                frameIndex = -1
+
             ++frameIndex
             count = 0
         }
+
+        if (frameIndex > MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER - 1)
+            frameIndex = 0
     }
 
     private fun handleAttackAnimationSprites(drawn_object: GameObject) {
         if (count >= ATTACK_UPDATE_DELAY) {
-
-            //done 1 attack action
-            if (frameIndex >= MAX_ATTACK_SPRITES_SIZE_OF_CHARACTER - 1) {
-//                drawn_object.setIsAttacking(false)
-//                drawn_object.setReadyToAttack(true)
-                drawn_object.setAction(ACTION_MOVE)
-                frameIndex = -1
-            }
-
             ++frameIndex
             count = 0
+        }
+
+        if (frameIndex > MAX_ATTACK_SPRITES_SIZE_OF_CHARACTER - 1) {
+            if (drawn_object is CharacterView)
+                drawn_object.setAction(ACTION_MOVE)
+            drawn_object.setIsAttacking(false)
+            frameIndex = 0
         }
 
     }

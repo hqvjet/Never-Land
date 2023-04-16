@@ -43,7 +43,6 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
                     game.update(averageFPS.toFloat())
                     ++updateCount
                     game.draw(canvas)
-//                    game.atk_btn.drawButton()
                 }
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
@@ -69,6 +68,7 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
                     e.printStackTrace()
                 }
             }
+
             // Skip frames to keep up with target UPS
             while (sleepTime < 0 && updateCount < MAX_UPS - 1) {
                 game.update(averageFPS.toFloat())
@@ -78,13 +78,13 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
             }
 
             // Calculate average UPS and FPS
-            elapsedTime = System.currentTimeMillis() - startTime;
+            elapsedTime = System.currentTimeMillis() - startTime
             if (elapsedTime >= 1000) {
-                averageUPS = updateCount / (1E-3 * elapsedTime);
-                averageFPS = frameCount / (1E-3 * elapsedTime);
-                updateCount = 0;
-                frameCount = 0;
-                startTime = System.currentTimeMillis();
+                averageUPS = updateCount / (1E-3 * elapsedTime)
+                averageFPS = frameCount / (1E-3 * elapsedTime)
+                updateCount = 0
+                frameCount = 0
+                startTime = System.currentTimeMillis()
             }
         }
 
