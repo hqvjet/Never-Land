@@ -6,12 +6,12 @@ import android.graphics.Color
 import android.graphics.PointF
 import com.hereams.neverland.R
 import com.hereams.neverland.constant.*
-import com.hereams.neverland.gameLoop.controller.thread.AttackController
 import com.hereams.neverland.gameObjects.model.Enemy
 import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.graphics.Animator
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
+import java.lang.Float.max
 
 
 class EnemyView(
@@ -33,11 +33,11 @@ class EnemyView(
     private lateinit var characterLeftAttackSpritesSheet: SpritesSheet
     private lateinit var characterDownAttackSpritesSheet: SpritesSheet
     private lateinit var movementSpritesSheetArray: ArrayList<SpritesSheet>
+    private lateinit var hp_bar: EnemyBar
 
     lateinit var state: LivingAnimationObjectState
     lateinit var model: Enemy
-    lateinit var attack_controller: AttackController
-    var ready_to_attack: Boolean = true
+    lateinit var MAX_HP: Number
     var count: Int = 0
 
     private lateinit var MAX_SPEED: Number
@@ -107,12 +107,18 @@ class EnemyView(
         state = LivingAnimationObjectState(this)
 
         model = Enemy(1, enemy_id)
-        attack_controller = AttackController(model.getAttackSpeed().toFloat(), this)
+
+        MAX_HP = model.getEnemyHp()
 
         MAX_SPEED = model.getEnemyMoveSpeed()
+
+        hp_bar = EnemyBar(context, this)
     }
 
     override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
+
+        hp_bar.draw(canvas, gameDisplay)
+
         animator.draw(canvas, gameDisplay, this)
     }
 
@@ -140,7 +146,10 @@ class EnemyView(
         val directionY = distanceToPlayerY / distanceToPlayer
 
         // Set velocity in the direction to the player
-        if (distanceToPlayer > 0) { // Avoid division by zero
+        if (action == ACTION_ATTACK) {
+            velocity.x = 0f
+            velocity.y = 0f
+        } else if (distanceToPlayer > 0) { // Avoid division by zero
             velocity.x = directionX * MAX_SPEED.toFloat()
             velocity.y = directionY * MAX_SPEED.toFloat()
         } else {
@@ -162,5 +171,15 @@ class EnemyView(
         return state.getState()
     }
 
+    fun attack(target: CharacterView) {
+        action = ACTION_ATTACK
+        state.update()
+        target.isDamaged(model.getEnemyAttack().toInt())
+    }
+
+    fun isDamaged(damage: Int) {
+        model.setEnemyHp(max(0f, (model.getEnemyHp().toInt() - damage).toFloat()))
+        hp_bar.update()
+    }
 
 }

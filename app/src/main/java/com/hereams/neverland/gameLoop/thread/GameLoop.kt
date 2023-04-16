@@ -1,4 +1,4 @@
-package com.hereams.neverland.gameLoop
+package com.hereams.neverland.gameLoop.thread
 
 import android.graphics.Canvas
 import android.view.SurfaceHolder
@@ -37,12 +37,13 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
 
             //Try to update and render game
             try {
+                game.postInvalidate()
                 canvas = surfaceHolder.lockCanvas()
                 synchronized(surfaceHolder) {
                     game.update(averageFPS.toFloat())
                     ++updateCount
                     game.draw(canvas)
-                    game.invalidate()
+//                    game.atk_btn.drawButton()
                 }
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()

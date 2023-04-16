@@ -2,6 +2,7 @@ package com.hereams.neverland.gameObjects
 
 import android.graphics.Canvas
 import android.graphics.PointF
+import com.hereams.neverland.constant.ACTION_MOVE
 import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.graphics.GameDisplay
 import kotlin.math.pow
@@ -13,7 +14,11 @@ import kotlin.math.sqrt
 abstract class GameObject {
     protected var position: PointF
     protected var velocity: PointF = PointF(0f, 0f)
-    protected var direction: PointF = PointF(0f, 0f)
+    protected var direction: LivingAnimationObjectState.State =
+        LivingAnimationObjectState.State.IS_MOVING_FORWARD
+    protected var action: String = ACTION_MOVE
+    protected var ready_to_attack: Boolean = true
+    protected var is_attacking: Boolean = false
 
     constructor(position: PointF) {
         this.position = position
@@ -25,6 +30,42 @@ abstract class GameObject {
 
     fun getObjectVelocity(): PointF {
         return velocity
+    }
+
+    @JvmName("getAction1")
+    fun getAction(): String {
+        return action
+    }
+
+    @JvmName("setAction1")
+    fun setAction(value: String) {
+        action = value
+    }
+
+    @JvmName("getDirection1")
+    fun getDirection(): LivingAnimationObjectState.State {
+        return direction
+    }
+
+    @JvmName("setDirection1")
+    fun setDirection(value: LivingAnimationObjectState.State) {
+        direction = value
+    }
+
+    fun readyToAttack(): Boolean {
+        return ready_to_attack
+    }
+
+    fun setReadyToAttack(value: Boolean) {
+        ready_to_attack = value
+    }
+
+    fun isAttacking(): Boolean {
+        return is_attacking
+    }
+
+    fun setIsAttacking(value: Boolean) {
+        is_attacking = value
     }
 
     abstract fun draw(canvas: Canvas?, gameDisplay: GameDisplay)

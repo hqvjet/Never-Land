@@ -56,16 +56,21 @@ class SpritesSheet(
 
     }
 
-    fun getCharacterMovementSpritesArray(): Array<Sprites> {
+    fun getCharacterSpritesArray(): Array<Sprites> {
 
-        val fixed: Int = if (binding_condition == MOVE_SPRITE) 1 else 0
+        val fixed: Int = if (binding_condition == MOVE_SPRITE) 1 else 1
+        val number_of_sprites =
+            if (binding_condition == MOVE_SPRITE)
+                MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER
+            else
+                MAX_ATTACK_SPRITES_SIZE_OF_CHARACTER
 
-        val spritesArray = Array(MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER) { i ->
+        val spritesArray = Array(number_of_sprites) { i ->
             Sprites(
                 this, Rect(
-                    (i % MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER) * SPRITES_SIZE,
+                    (i % number_of_sprites) * SPRITES_SIZE,
                     fixed * SPRITES_SIZE,
-                    (i % MAX_MOVEMENT_SPRITES_SIZE_OF_CHARACTER + 1) * SPRITES_SIZE,
+                    (i % number_of_sprites + 1) * SPRITES_SIZE,
                     (fixed + 1) * SPRITES_SIZE
                 )
             )

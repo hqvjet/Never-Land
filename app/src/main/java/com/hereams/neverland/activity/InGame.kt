@@ -4,15 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
-import com.hereams.neverland.R
-import com.hereams.neverland.gameLoop.GameLoop
-import com.hereams.neverland.gameObjects.Game
-import com.hereams.neverland.gameObjects.view.component.CharacterView
-import com.hereams.neverland.gameObjects.view.component.DPadView
+import com.hereams.neverland.gameObjects.layout.GameLayout
 
 class InGame : AppCompatActivity() {
 
-    private lateinit var game: Game
+    private lateinit var game_layout: GameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +19,9 @@ class InGame : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        game = Game(this)
+        game_layout = GameLayout(this)
 
-        setContentView(game)
+        setContentView(game_layout)
 
     }
 }

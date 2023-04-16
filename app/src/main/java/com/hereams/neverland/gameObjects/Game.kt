@@ -12,15 +12,14 @@ import android.view.WindowManager
 import com.hereams.neverland.R
 import com.hereams.neverland.constant.CIRCLE_RADIUS
 import com.hereams.neverland.constant.Helper
-import com.hereams.neverland.constant.SPRITES_SIZE
 import com.hereams.neverland.constant.TILEMAP
-import com.hereams.neverland.gameLoop.GameLoop
+import com.hereams.neverland.gameLoop.thread.GameLoop
+import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.gameObjects.view.component.*
 import com.hereams.neverland.gameObjects.view.map.TheHallWay
 import com.hereams.neverland.gameObjects.view.map.TileMap
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
-
 
 /**
  * This class is used for handling all entities in game to screen such as:
@@ -31,11 +30,10 @@ import com.hereams.neverland.graphics.SpritesSheet
  *
  * Implement: SurfaceHolder.Callback
  */
-class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
+class Game(context: Context, val dpad: DPadView, val character: CharacterView, val atk_btn: AttackButtonView) :
+    SurfaceView(context), SurfaceHolder.Callback {
 
     //Entities
-    lateinit var character: CharacterView
-    private lateinit var dpad: DPadView
     private lateinit var infoBox: InfoBox
     private lateinit var tile_map: TileMap
     lateinit var enemy_list: Array<EnemyView>
@@ -54,40 +52,20 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private lateinit var the_hall_way: TheHallWay
 
     //parameters
-    private var dpadPointerId = 0
+    private var dpadPointerId = -1
 
     init {
         setBackgroundColor(Color.TRANSPARENT)
+        setZOrderMediaOverlay(true)
         val surfaceHolder: SurfaceHolder = holder
         surfaceHolder.addCallback(this)
 
         game_loop = GameLoop(this, surfaceHolder)
 
         //init sprite sheets
-        earth_sprite_sheet = SpritesSheet(this.context, R.drawable.sprite_sheet, null, null, TILEMAP)
+        earth_sprite_sheet =
+            SpritesSheet(this.context, R.drawable.sprite_sheet, null, null, TILEMAP)
 
-        //init character, info box and controller
-        dpad = DPadView(
-            PointF(
-                230f, 800f
-            ),
-            80f, 200f
-        )
-
-        val displayMetrics = DisplayMetrics()
-        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getMetrics(
-            displayMetrics
-        )
-
-        character = CharacterView(
-            context,
-            PointF(
-                displayMetrics.widthPixels.toFloat() / 2f,
-                displayMetrics.heightPixels.toFloat() / 2f
-            ),
-            CIRCLE_RADIUS,
-            dpad
-        )
         infoBox = InfoBox(this.context, character)
 
         //init maps, tilemap with enemies inside
@@ -96,6 +74,11 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         enemy_list = tile_map.getEnemy()
 
         // Initialize display and center it around the player
+
+        val displayMetrics = DisplayMetrics()
+        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getMetrics(
+            displayMetrics
+        )
 
         game_display =
             GameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, character)
@@ -106,11 +89,11 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         //the latest drawn  entity will appear first
         tile_map.draw(canvas, game_display)
+        dpad.draw(canvas)
 
         for (i in enemy_list.indices)
             enemy_list[i].draw(canvas, game_display)
 
-        dpad.draw(canvas)
         character.draw(canvas, game_display)
         infoBox.draw(canvas)
 
@@ -120,19 +103,40 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         //Update game state
 
+        dpad.update()
         for (i in enemy_list.indices)
             enemy_list[i].update(fps)
 
-        dpad.update()
         character.update(fps)
         infoBox.update()
         game_display.update()
 
-        for (i in enemy_list.indices)
-            if (Circle.isColliding(character, enemy_list[i]) && enemy_list[i].ready_to_attack) {
-                character.isAttacked(enemy_list[i].model.getEnemyAttack().toInt())
-                enemy_list[i].ready_to_attack = false
+        //check for collision between player and enemies
+        for (i in enemy_list.indices) {
+
+            //character is in range of enemy[i] attack
+            if (Circle.isColliding(character, enemy_list[i]) && enemy_list[i].readyToAttack()) {
+                enemy_list[i].attack(character)
+                enemy_list[i].setReadyToAttack(false)
             }
+
+            //enemy[i] is in range of character attack
+//            if (Circle.isColliding(character, enemy_list[i]) && character.readyToAttack()) {
+//                character.attack(enemy_list[i])
+////                character.setAttackState(false)
+//            }
+        }
+
+        if(character.readyToAttack() && atk_btn.getIsPressed()) {
+
+            for (i in enemy_list.indices) {
+                if (Circle.isColliding(character, enemy_list[i])) {
+                    character.attack(enemy_list[i])
+                }
+            }
+
+            character.setReadyToAttack(false)
+        }
 
     }
 
@@ -160,42 +164,42 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val touched_position: PointF = PointF(event.x, event.y)
         // Handle user input touch event actions
         when (event!!.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
-                if (dpad.isPressed(PointF(event.x, event.y))) {
+                //touched in dpad range
+
+                if (!dpad.getIsPressed() && dpad.isPressed(touched_position)) {
                     // dpad is pressed in this event -> setIsPressed(true) and store pointer id
                     dpadPointerId = event.getPointerId(event.actionIndex)
                     dpad.setIsPressed(true)
-
-                    println("pressed")
-                } else {
-                    println("outside")
+                    dpad.setDpadActuator(touched_position)
                 }
+
                 return true
             }
             MotionEvent.ACTION_MOVE -> {
-                if (dpad.getIsPressed() && event.getPointerId(event.actionIndex) === dpadPointerId) {
+                if (dpad.getIsPressed()) {
                     // dpad was pressed previously and is now moved
-                    dpad.setDpadActuator(PointF(event.x, event.y))
-                    println("moving")
+                    dpad.setDpadActuator(touched_position)
                 }
                 return true
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                if (event.getPointerId(event.actionIndex) === dpadPointerId) {
+                if (dpadPointerId == event.getPointerId(event.actionIndex)) {
                     // dpad pointer was let go off -> setIsPressed(false) and resetActuator()
                     dpad.setIsPressed(false)
                     dpad.resetActuator()
-                    println("lifted")
+                    dpadPointerId = -1
                 }
                 return true
             }
         }
 
         return super.onTouchEvent(event)
+
     }
 
 }

@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.PointF
 import com.hereams.neverland.R
 import com.hereams.neverland.constant.*
-import com.hereams.neverland.gameLoop.controller.thread.AttackController
 import com.hereams.neverland.gameObjects.model.Character
 import com.hereams.neverland.gameObjects.model.Inventory
 import com.hereams.neverland.gameObjects.model.Option
@@ -37,9 +36,9 @@ class CharacterView(
     lateinit var state: LivingAnimationObjectState
     private lateinit var MAX_SPEED: Number
     private lateinit var MAX_HP: Number
+    private var count = 0
 
     lateinit var model: Character
-    lateinit var atk_controller: AttackController
 
     init {
 
@@ -111,8 +110,6 @@ class CharacterView(
             Option(EN, "jacky", "1231233")
         )
 
-        atk_controller = AttackController(model.getAttackSpeed().toFloat(), this)
-
         MAX_SPEED = model.getMoveSpeed()
         MAX_HP = model.getPlayerHp()
     }
@@ -126,11 +123,22 @@ class CharacterView(
     }
 
     override fun update(fps: Float) {
+        if (!ready_to_attack)
+            ++count
+        if (count >= fps / model.getAttackSpeed().toFloat()) {
+            count = 0
+            ready_to_attack = true
+        }
 
         // Update velocity based on actuator of d_pad
-        velocity.x = d_pad.getActuatorX() * MAX_SPEED.toFloat()
-        velocity.y = d_pad.getActuatorY() * MAX_SPEED.toFloat()
-
+        if(action != ACTION_ATTACK) {
+            velocity.x = d_pad.getActuatorX() * MAX_SPEED.toFloat()
+            velocity.y = d_pad.getActuatorY() * MAX_SPEED.toFloat()
+        }
+        else {
+            velocity.x = 0f
+            velocity.y = 0f
+        }
         // Update position
         position.x += velocity.x
         position.y += velocity.y
@@ -139,9 +147,6 @@ class CharacterView(
         if (velocity.x !== 0f || velocity.y !== 0f) {
             // Normalize velocity to get direction (unit vector of velocity)
             val distance: Float = Utils().getDistanceBetweenPoints(0f, 0f, velocity.x, velocity.y)
-            direction.x = velocity.x / distance
-            direction.y = velocity.y / distance
-            println(distance)
         }
 
         state.update()
@@ -152,8 +157,14 @@ class CharacterView(
         animator.draw(canvas, gameDisplay, this)
     }
 
-    fun isAttacked(damaged: Int) {
+    fun isDamaged(damaged: Int) {
         model.setPlayerHp(max(0f, model.getPlayerHp().toInt() - damaged.toFloat()))
+    }
+
+    fun attack(target: EnemyView) {
+        action = ACTION_ATTACK
+        state.update()
+        target.isDamaged(model.getPlayerAttack().toInt())
     }
 
 }
