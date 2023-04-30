@@ -1,4 +1,4 @@
-package com.hereams.neverland.gameObjects.view.map
+package com.hereams.neverland.gameObjects.view.component.map
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -14,7 +14,7 @@ class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
     private lateinit var row: Number
     private lateinit var column: Number
     private lateinit var tile_map: Array<Array<Tile?>>
-    private lateinit var enemy: Array<EnemyView>
+    private lateinit var enemy: MutableList<EnemyView>
 
     init {
         initializeTileMap()
@@ -71,8 +71,12 @@ class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
         )
     }
 
-    fun getEnemy(): Array<EnemyView> {
+    fun getEnemy(): MutableList<EnemyView> {
         return enemy
+    }
+
+    fun removeEnemy(index: Int) {
+        enemy.removeAt(index)
     }
 
 }

@@ -1,15 +1,13 @@
 package com.hereams.neverland.gameObjects.view.component
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PointF
-import android.view.*
+import android.graphics.*
+import android.view.MotionEvent
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import android.widget.FrameLayout
-import com.hereams.neverland.gameLoop.thread.GameLoop
+import com.hereams.neverland.R
 import kotlin.math.pow
-import kotlin.math.sqrt
 
 class AttackButtonView(
     context: Context,
@@ -19,15 +17,14 @@ class AttackButtonView(
     val radius: Float, val character: CharacterView
 ) : SurfaceView(context), SurfaceHolder.Callback {
 
-    private val paint = Paint().apply {
-        color = Color.BLUE
-        style = Paint.Style.FILL_AND_STROKE
-    }
+    private lateinit var paint: Paint
 
     private var is_pressed: Boolean = false
+    private var icon_padding: Int = 40
 
     private lateinit var surfaceHolder: SurfaceHolder
     private lateinit var canvas: Canvas
+    private lateinit var scaledBitmap: Bitmap
 
     //Positions
     var circle_position: PointF = PointF(center_position.x, center_position.y)
@@ -36,6 +33,8 @@ class AttackButtonView(
 
         translationX = view_position.x
         translationY = view_position.y
+
+        importIcon()
 
         val layoutParam = FrameLayout.LayoutParams(size.x.toInt(), size.y.toInt())
 
@@ -47,6 +46,24 @@ class AttackButtonView(
 
     }
 
+    private fun importIcon() {
+        // Load the image drawable
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.btn_atk)
+
+        // Create a new Paint object with the shader
+        paint = Paint().apply {
+            color = Color.BLUE
+            style = Paint.Style.FILL_AND_STROKE
+        }
+
+        scaledBitmap = Bitmap.createScaledBitmap(
+            bitmap,
+            radius.toInt() * 2 - icon_padding,
+            radius.toInt() * 2 - icon_padding,
+            true
+        )
+    }
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
@@ -56,6 +73,19 @@ class AttackButtonView(
             radius,
             paint
         )
+
+        canvas?.drawBitmap(
+            scaledBitmap,
+            null,
+            RectF(
+                circle_position.x - radius + icon_padding,
+                circle_position.y - radius + icon_padding,
+                circle_position.x + radius - icon_padding,
+                circle_position.y + radius - icon_padding
+            ),
+            null
+        )
+
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -64,20 +94,24 @@ class AttackButtonView(
         when (event!!.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 //touched in attack button range
+                if (isPressed(touched_position)) {
                     setIsPressed(true)
                     changeBackgroundColor(Color.RED)
-
                     postInvalidate()
                     drawButton()
+                }
 
                 return true
             }
             MotionEvent.ACTION_UP -> {
                 if (getIsPressed()) {
-                    setIsPressed(false)
-                    changeBackgroundColor(Color.BLUE)
-                    postInvalidate()
-                    drawButton()
+                    if (getIsPressed()) {
+                        setIsPressed(false)
+                        changeBackgroundColor(Color.BLUE)
+                        postInvalidate()
+                        drawButton()
+                    }
+
                 }
                 return true
             }

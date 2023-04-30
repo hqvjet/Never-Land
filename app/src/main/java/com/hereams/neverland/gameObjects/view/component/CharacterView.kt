@@ -6,10 +6,7 @@ import android.graphics.Color
 import android.graphics.PointF
 import com.hereams.neverland.R
 import com.hereams.neverland.constant.*
-import com.hereams.neverland.gameObjects.model.Character
-import com.hereams.neverland.gameObjects.model.Inventory
-import com.hereams.neverland.gameObjects.model.Option
-import com.hereams.neverland.gameObjects.model.Weapon
+import com.hereams.neverland.gameObjects.model.*
 import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.graphics.Animator
 import com.hereams.neverland.graphics.GameDisplay
@@ -19,7 +16,8 @@ import kotlin.math.max
 class CharacterView(
     context: Context, position: PointF,
     radius: Float,
-    val d_pad: DPadView
+    val d_pad: DPadView,
+    val inventory: Inventory
 ) : Circle(context, Color.RED, position, radius) {
 
     lateinit var canvas: Canvas
@@ -106,7 +104,7 @@ class CharacterView(
             "Jack", 1, 1, KNIGHT, 1, 1,
             1, 1, 1, 1, 1,
             Weapon(STEEL_SWORD, 1),
-            Inventory(10, 1000),
+            inventory,
             Option(EN, "jacky", "1231233")
         )
 
@@ -131,11 +129,10 @@ class CharacterView(
         }
 
         // Update velocity based on actuator of d_pad
-        if(action != ACTION_ATTACK) {
+        if (action != ACTION_ATTACK) {
             velocity.x = d_pad.getActuatorX() * MAX_SPEED.toFloat()
             velocity.y = d_pad.getActuatorY() * MAX_SPEED.toFloat()
-        }
-        else {
+        } else {
             velocity.x = 0f
             velocity.y = 0f
         }
@@ -166,5 +163,17 @@ class CharacterView(
         state.update()
         target.isDamaged(model.getPlayerAttack().toInt())
     }
+
+    fun setItems(items: Array<com.hereams.neverland.gameObjects.view.component.item.Item>) {
+        inventory.addItems(items)
+    }
+
+    fun setItem(weapon: com.hereams.neverland.gameObjects.view.component.item.Weapon) {
+        inventory.addItem(weapon)
+    }
+
+//    fun setItem(potion: ) {
+//        inventory.addItem(potion)
+//    }
 
 }

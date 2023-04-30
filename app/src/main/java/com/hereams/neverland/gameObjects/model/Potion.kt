@@ -10,13 +10,11 @@ class Potion: Item {
 //    private lateinit var potion_sprites
 
     constructor(
-        name: String, description: String, price: Number,
-        classify: String, discardable: Boolean, tradeable: Boolean,
-        heal: Number, stack: Number
-    ) : super(name, description, price, classify, discardable, tradeable) {
+        potion_id: Int, stack: Number
+    ) : super(potion_id, stack as Int) {
 
-        setPotionHealAmount(heal)
-        setPotionStack(stack)
+//        setPotionHealAmount(heal)
+//        setPotionStack(stack)
 
     }
 

@@ -1,5 +1,7 @@
 package com.hereams.neverland.gameObjects.model
 
+import com.hereams.neverland.constant.*
+
 open class Item {
 
     private lateinit var item_id: Number
@@ -7,20 +9,20 @@ open class Item {
     private lateinit var item_description: String
     private lateinit var item_price: Number
     private lateinit var item_classify: String
+    private lateinit var item_quantity: Number
     private var discardable = false
     private var tradeable = false
 
     constructor(
-        name: String, description: String, price: Number,
-        classify: String, discardable: Boolean, tradeable: Boolean
+        item_id: Int, quantity: Int
     ) {
 
-        setItemName(name)
-        setItemDescription(description)
-        setItemPrice(price)
-        setItemClassify(classify)
-        setDiscardable(discardable)
-        setTradeable(tradeable)
+        setItemName(ITEM_NAME[item_id])
+        setItemDescription(ITEM_DESCRIPTION[item_id])
+        setItemPrice(ITEM_PRICE[item_id])
+        setItemClassify(ITEM_CLASSIFY[item_id])
+        setDiscardable(ITEM_DISCARDABLE[item_id])
+        setTradeable(ITEM_TRADEALBE[item_id])
 
     }
 
@@ -78,5 +80,13 @@ open class Item {
 
     fun setTradeable(isTradeable: Boolean) {
         tradeable = isTradeable
+    }
+
+    fun getQuantity(): Int {
+        return item_quantity.toInt()
+    }
+
+    fun setQuantity(value: Int) {
+        item_quantity = value
     }
 }

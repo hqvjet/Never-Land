@@ -1,4 +1,4 @@
-package com.hereams.neverland.gameObjects.view.map
+package com.hereams.neverland.gameObjects.view.component.map
 
 import android.graphics.Canvas
 import android.graphics.Rect

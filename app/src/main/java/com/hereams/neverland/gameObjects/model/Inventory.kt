@@ -1,9 +1,11 @@
 package com.hereams.neverland.gameObjects.model
 
-class Inventory(slot: Int, gold: Int) {
+class Inventory(
+    slot: Int, gold: Int,
+) {
     private lateinit var inventory_slot: Number
     private lateinit var inventory_gold: Number
-    private lateinit var inventory_items: MutableList<Item>
+    private lateinit var inventory_items: MutableList<com.hereams.neverland.gameObjects.view.component.item.Item>
 
     init {
         inventory_slot = slot
@@ -21,12 +23,20 @@ class Inventory(slot: Int, gold: Int) {
         inventory_gold = value
     }
 
-    fun addItem(item: Item) {
+    fun addItem(item: com.hereams.neverland.gameObjects.view.component.item.Item) {
         inventory_items.add(item)
     }
 
-    fun removeItem(item: Item) {
+    fun addItems(items: Array<com.hereams.neverland.gameObjects.view.component.item.Item>) {
+        inventory_items.addAll(items)
+    }
+
+    fun removeItem(item: com.hereams.neverland.gameObjects.view.component.item.Item) {
         inventory_items.remove(item)
+    }
+
+    fun getItems(): MutableList<com.hereams.neverland.gameObjects.view.component.item.Item> {
+        return inventory_items
     }
 
     fun getAmountOfItem() = inventory_items.size

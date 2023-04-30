@@ -1,16 +1,16 @@
-package com.hereams.neverland.gameObjects.layout
+package com.hereams.neverland.gameObjects.view.layout
 
 import android.content.Context
 import android.graphics.PointF
+import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.FrameLayout
 import com.hereams.neverland.constant.CIRCLE_RADIUS
 import com.hereams.neverland.gameObjects.Game
-import com.hereams.neverland.gameObjects.model.Inventory
-import com.hereams.neverland.gameObjects.view.component.AttackButtonView
-import com.hereams.neverland.gameObjects.view.component.CharacterView
-import com.hereams.neverland.gameObjects.view.component.DPadView
+import com.hereams.neverland.gameObjects.view.component.*
+import com.hereams.neverland.gameObjects.view.component.inventory.InventoryButton
+import com.hereams.neverland.gameObjects.view.component.inventory.InventoryView
 
 class GameLayout(context: Context) : FrameLayout(context) {
 
@@ -18,10 +18,10 @@ class GameLayout(context: Context) : FrameLayout(context) {
     private lateinit var attack_button: AttackButtonView
     private lateinit var dpad: DPadView
     private lateinit var character: CharacterView
-    private lateinit var inventory: Inventory
+    private lateinit var inventory_button: InventoryButton
 
     //features
-//    private lateinit var bag
+    private lateinit var inventory_view: InventoryView
 //    private lateinit var self
 
     init {
@@ -46,10 +46,14 @@ class GameLayout(context: Context) : FrameLayout(context) {
             80f, 200f
         )
 
-        inventory = Inventory(
-            context,
-            10,
-            1000,
+        inventory_view = InventoryView(
+            this.context,
+            screen
+        )
+
+        inventory_button = InventoryButton(
+            this,
+            inventory_view,
             PointF((screen.x * 0.75).toFloat(), (screen.y * 0.8).toFloat()),
             PointF(10f, 10f),
             PointF(50f, 50f),
@@ -64,8 +68,10 @@ class GameLayout(context: Context) : FrameLayout(context) {
             ),
             CIRCLE_RADIUS,
             dpad,
-            inventory
+            inventory_view.getModel()
         )
+
+        inventory_view.setOwner(character)
 
         attack_button = AttackButtonView(
             this.context,
@@ -86,9 +92,8 @@ class GameLayout(context: Context) : FrameLayout(context) {
         game = Game(this.context, dpad, character, attack_button)
 
         addView(game, layoutParams_full)
-        addView(inventory, layoutParams_wrap)
+        addView(inventory_button, layoutParams_wrap)
         addView(attack_button, layoutParams_wrap)
-
     }
 
 }

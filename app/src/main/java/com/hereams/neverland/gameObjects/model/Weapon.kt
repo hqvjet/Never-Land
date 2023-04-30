@@ -11,8 +11,7 @@ class Weapon : Item {
 
     constructor(
         weapon_id:Int, enhance_level: Number
-    ) : super(ITEM_NAME[weapon_id], ITEM_DESCRIPTION[weapon_id], ITEM_PRICE[weapon_id],
-        ITEM_CLASSIFY[weapon_id], ITEM_DISCARDABLE[weapon_id], ITEM_TRADEALBE[weapon_id]) {
+    ) : super(weapon_id, 1) {
 
         setWeaponAttack(ITEM_STAT[weapon_id])
         setEnhanceLevel(enhance_level)

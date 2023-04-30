@@ -10,14 +10,14 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.WindowManager
 import com.hereams.neverland.R
-import com.hereams.neverland.constant.CIRCLE_RADIUS
 import com.hereams.neverland.constant.Helper
 import com.hereams.neverland.constant.TILEMAP
 import com.hereams.neverland.gameLoop.thread.GameLoop
-import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.gameObjects.view.component.*
-import com.hereams.neverland.gameObjects.view.map.TheHallWay
-import com.hereams.neverland.gameObjects.view.map.TileMap
+import com.hereams.neverland.gameObjects.view.component.inventory.ItemView
+import com.hereams.neverland.gameObjects.view.component.item.SteelSword
+import com.hereams.neverland.gameObjects.view.component.map.TheHallWay
+import com.hereams.neverland.gameObjects.view.component.map.TileMap
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
 
@@ -36,7 +36,7 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
     //Entities
     private lateinit var infoBox: InfoBox
     private lateinit var tile_map: TileMap
-    lateinit var enemy_list: Array<EnemyView>
+    lateinit var enemy_list: MutableList<EnemyView>
 
     //Game loop
     private lateinit var game_loop: GameLoop
@@ -50,6 +50,10 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
 
     //maps
     private lateinit var the_hall_way: TheHallWay
+
+    //items
+    private lateinit var item_view: ItemView
+    private lateinit var steel_sword: SteelSword
 
     //parameters
     private var dpadPointerId = -1
@@ -73,6 +77,14 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
         tile_map = TileMap(earth_sprite_sheet, the_hall_way)
         enemy_list = tile_map.getEnemy()
 
+        //init items
+        steel_sword = SteelSword(this.context, 1)
+        character.setItem(steel_sword)
+        character.setItem(steel_sword)
+        character.setItem(steel_sword)
+        character.setItem(steel_sword)
+        character.setItem(steel_sword)
+
         // Initialize display and center it around the player
 
         val displayMetrics = DisplayMetrics()
@@ -90,8 +102,7 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
         //the latest drawn  entity will appear first
         tile_map.draw(canvas, game_display)
         dpad.draw(canvas)
-
-        for (i in enemy_list.indices)
+        for (i in 0 until enemy_list.size)
             enemy_list[i].draw(canvas, game_display)
 
         character.draw(canvas, game_display)
@@ -104,15 +115,40 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
         //Update game state
 
         dpad.update()
-        for (i in enemy_list.indices)
+        for (i in 0 until enemy_list.size)
             enemy_list[i].update(fps)
 
         character.update(fps)
         infoBox.update()
         game_display.update()
 
+        var size = enemy_list.size
+
+        if(character.readyToAttack() && atk_btn.getIsPressed()) {
+            var i = 0
+            while(i < size) {
+                if (Circle.isColliding(character, enemy_list[i])) {
+                    character.attack(enemy_list[i])
+
+                    //enemy died
+                    if(enemy_list[i].model.getEnemyHp().toInt() <= 0) {
+                        tile_map.removeEnemy(i)
+                        enemy_list = tile_map.getEnemy()
+                        --size
+                        --i
+                    }
+
+                    character.setReadyToAttack(false)
+                    character.setIsAttacking(true)
+                }
+                ++i
+            }
+
+            character.setReadyToAttack(false)
+        }
+
         //check for collision between player and enemies
-        for (i in enemy_list.indices) {
+        for (i in 0 until size) {
 
             //character is in range of enemy[i] attack
             if (Circle.isColliding(character, enemy_list[i]) && enemy_list[i].readyToAttack()) {
@@ -125,19 +161,6 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
                 enemy_list[i].move()
             }
 
-        }
-
-        if(character.readyToAttack() && atk_btn.getIsPressed()) {
-
-            for (i in enemy_list.indices) {
-                if (Circle.isColliding(character, enemy_list[i])) {
-                    character.attack(enemy_list[i])
-                    character.setReadyToAttack(false)
-                    character.setIsAttacking(true)
-                }
-            }
-
-            character.setReadyToAttack(false)
         }
 
     }

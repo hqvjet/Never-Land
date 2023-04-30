@@ -1,4 +1,4 @@
-package com.hereams.neverland.gameObjects.view.component
+package com.hereams.neverland.gameObjects.view.component.inventory
 
 import android.content.Context
 import android.graphics.*
@@ -8,17 +8,17 @@ import android.view.SurfaceView
 import android.widget.FrameLayout
 import com.hereams.neverland.R
 import com.hereams.neverland.gameObjects.model.Inventory
-import com.hereams.neverland.gameObjects.model.Item
+import com.hereams.neverland.gameObjects.view.layout.GameLayout
 import kotlin.math.pow
 
-class InventoryView(
-    context: Context,
+class InventoryButton(
+    val layout: GameLayout,
+    val view: InventoryView,
     val view_position: PointF,
     val size: PointF,
     val center_position: PointF,
-    val radius: Float,
-
-) : SurfaceView(context), SurfaceHolder.Callback {
+    val radius: Float
+) : SurfaceView(layout.context), SurfaceHolder.Callback {
 
     private var is_pressed: Boolean = false
     private val icon_padding: Int = 20
@@ -103,6 +103,7 @@ class InventoryView(
                     changeBackgroundColor(Color.RED)
                     postInvalidate()
                     drawButton()
+                    layout.addView(view)
                 }
 
                 return true

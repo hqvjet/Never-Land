@@ -1,4 +1,4 @@
-package com.hereams.neverland.gameObjects.view.map
+package com.hereams.neverland.gameObjects.view.component.map
 
 import android.content.Context
 import android.graphics.PointF
@@ -8,10 +8,10 @@ import com.hereams.neverland.constant.SPRITES_SIZE
 import com.hereams.neverland.gameObjects.view.component.CharacterView
 import com.hereams.neverland.gameObjects.view.component.EnemyView
 
-class TheHallWay(val context: Context, val player: CharacterView): GameMap() {
+class TheHallWay(val context: Context, val player: CharacterView) : GameMap() {
     private val NUMBER_OF_ROW_TILES = 5
     private val NUMBER_OF_COLUMN_TILES = 5
-    private lateinit var enemy: Array<EnemyView>
+    private lateinit var enemy: MutableList<EnemyView>
 
     private lateinit var layout: Array<Array<Int>>
 
@@ -32,7 +32,7 @@ class TheHallWay(val context: Context, val player: CharacterView): GameMap() {
         return NUMBER_OF_COLUMN_TILES
     }
 
-    override fun getEnemy(): Array<EnemyView> {
+    override fun getEnemy(): MutableList<EnemyView> {
         return enemy
     }
 
@@ -47,12 +47,15 @@ class TheHallWay(val context: Context, val player: CharacterView): GameMap() {
     }
 
     private fun initializeEnemy() {
-        enemy = arrayOf(
+        enemy = mutableListOf(
             EnemyView(context, SKELETON, player, PointF(0f, 0f), CIRCLE_RADIUS),
             EnemyView(context, SKELETON, player, PointF(30f, 60f), CIRCLE_RADIUS),
             EnemyView(context, SKELETON, player, PointF(200f, 400f), CIRCLE_RADIUS),
             EnemyView(context, SKELETON, player, PointF(300f, 600f), CIRCLE_RADIUS),
-            EnemyView(context, SKELETON, player, PointF(1000f, 60f), CIRCLE_RADIUS),
+            EnemyView(context, SKELETON, player, PointF(1000f, 60f), CIRCLE_RADIUS)
         )
+
+
     }
+
 }
