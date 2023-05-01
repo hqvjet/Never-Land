@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Rect
 import com.hereams.neverland.constant.SPRITES_SIZE
-import com.hereams.neverland.gameObjects.view.component.EnemyView
+import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
 

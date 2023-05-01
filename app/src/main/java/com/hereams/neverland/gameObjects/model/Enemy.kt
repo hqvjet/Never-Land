@@ -3,7 +3,7 @@ package com.hereams.neverland.gameObjects.model
 import com.hereams.neverland.constant.*
 
 class Enemy(
-    level: Int, enemy_id: Int
+    level: Int, val enemy_id: Int
 ) {
 
     private lateinit var enemy_name: String
@@ -14,6 +14,8 @@ class Enemy(
     private lateinit var enemy_hp: Number
     private lateinit var enemy_move_speed: Number
     private lateinit var enemy_attack_speed: Number
+    private lateinit var enemy_item_drop: MutableList<com.hereams.neverland.gameObjects.view.component.item.Item>
+    private var enemy_drop_rate: Double = 0.0
 
     init {
         enemy_name = ENEMY_NAME[enemy_id]
@@ -24,6 +26,7 @@ class Enemy(
         enemy_hp = ENEMY_HP[enemy_id]
         enemy_move_speed = ENEMY_MOVE_SPEED[enemy_id]
         enemy_attack_speed = ENEMY_ATTACK_SPEED[enemy_id]
+        enemy_drop_rate = ENEMY_ITEM_DROP_RATE[enemy_id]
     }
 
     fun getEnemyName() = enemy_name
@@ -64,5 +67,9 @@ class Enemy(
     fun getAttackSpeed() = enemy_attack_speed
     fun setAttackSpeed(value: Number) {
         enemy_attack_speed = value
+    }
+
+    fun getEnemyItemDropRate(): Double {
+        return enemy_drop_rate
     }
 }

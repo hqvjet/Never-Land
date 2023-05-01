@@ -1,12 +1,12 @@
-package com.hereams.neverland.gameObjects.view.component
+package com.hereams.neverland.gameObjects.view.component.enemy
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import com.hereams.neverland.constant.SPRITES_SIZE
+import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
 import com.hereams.neverland.graphics.GameDisplay
-import kotlin.math.max
 
 class EnemyBar(context: Context, val owner: EnemyView) {
 

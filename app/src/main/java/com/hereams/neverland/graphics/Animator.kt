@@ -5,8 +5,7 @@ import android.graphics.PointF
 import com.hereams.neverland.constant.*
 import com.hereams.neverland.gameObjects.GameObject
 import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
-import com.hereams.neverland.gameObjects.view.component.CharacterView
-import com.hereams.neverland.gameObjects.view.component.EnemyView
+import com.hereams.neverland.gameObjects.view.component.character.CharacterView
 
 class Animator(
     private val object_sprites_array: ArrayList<SpritesSheet>

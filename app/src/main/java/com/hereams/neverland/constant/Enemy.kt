@@ -11,4 +11,14 @@ val ENEMY_ATK = arrayOf(2f, 4f, 10f)
 val ENEMY_MOVE_SPEED = arrayOf(5f, 8f, 6f)
 val ENEMY_CLASSIFY = arrayOf(COMMON, ELITE, LEGENDARY)
 val ENEMY_ATTACK_SPEED = arrayOf(0.5f, 2f, 1f)
+val ENEMY_ITEM_DROP = arrayOf(
+    arrayOf(STEEL_SWORD),
+    arrayOf(STEEL_SWORD),
+    arrayOf(STEEL_SWORD)
+)
+val ENEMY_ITEM_DROP_RATE = arrayOf(
+    0.5,
+    0.3,
+    0.1
+)
 

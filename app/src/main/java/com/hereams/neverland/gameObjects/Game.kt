@@ -14,9 +14,14 @@ import com.hereams.neverland.constant.Helper
 import com.hereams.neverland.constant.TILEMAP
 import com.hereams.neverland.gameLoop.thread.GameLoop
 import com.hereams.neverland.gameObjects.view.component.*
+import com.hereams.neverland.gameObjects.view.component.character.AttackButtonView
+import com.hereams.neverland.gameObjects.view.component.character.CharacterView
+import com.hereams.neverland.gameObjects.view.component.character.DPadView
+import com.hereams.neverland.gameObjects.view.component.character.InfoBox
+import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
 import com.hereams.neverland.gameObjects.view.component.inventory.ItemView
 import com.hereams.neverland.gameObjects.view.component.item.SteelSword
-import com.hereams.neverland.gameObjects.view.component.map.TheHallWay
+import com.hereams.neverland.gameObjects.view.component.map.map_list.TheHallWay
 import com.hereams.neverland.gameObjects.view.component.map.TileMap
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
@@ -51,10 +56,6 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
     //maps
     private lateinit var the_hall_way: TheHallWay
 
-    //items
-    private lateinit var item_view: ItemView
-    private lateinit var steel_sword: SteelSword
-
     //parameters
     private var dpadPointerId = -1
 
@@ -76,14 +77,6 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
         the_hall_way = TheHallWay(this.context, character)
         tile_map = TileMap(earth_sprite_sheet, the_hall_way)
         enemy_list = tile_map.getEnemy()
-
-        //init items
-        steel_sword = SteelSword(this.context, 1)
-        character.setItem(steel_sword)
-        character.setItem(steel_sword)
-        character.setItem(steel_sword)
-        character.setItem(steel_sword)
-        character.setItem(steel_sword)
 
         // Initialize display and center it around the player
 
@@ -130,8 +123,9 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
                 if (Circle.isColliding(character, enemy_list[i])) {
                     character.attack(enemy_list[i])
 
-                    //enemy died
+                    //enemy died -> remove, get item(s)
                     if(enemy_list[i].model.getEnemyHp().toInt() <= 0) {
+                        enemy_list[i].drop(character.inventory)
                         tile_map.removeEnemy(i)
                         enemy_list = tile_map.getEnemy()
                         --size

@@ -1,8 +1,9 @@
-package com.hereams.neverland.gameObjects.view.component.map
+package com.hereams.neverland.gameObjects.view.component.map.tilemap_list
 
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Rect
+import com.hereams.neverland.gameObjects.view.component.map.Tile
 import com.hereams.neverland.graphics.Sprites
 import com.hereams.neverland.graphics.SpritesSheet
 

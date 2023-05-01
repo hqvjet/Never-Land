@@ -1,10 +1,10 @@
-package com.hereams.neverland.gameObjects.view.component
+package com.hereams.neverland.gameObjects.view.component.character
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import kotlin.math.max
+import com.hereams.neverland.gameObjects.view.component.character.CharacterView
 
 class InfoBox(context: Context, val owner: CharacterView) {
 

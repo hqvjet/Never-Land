@@ -2,6 +2,7 @@ package com.hereams.neverland.gameObjects.view.component.map
 
 import android.graphics.Canvas
 import android.graphics.Rect
+import com.hereams.neverland.gameObjects.view.component.map.tilemap_list.EarthType
 import com.hereams.neverland.graphics.SpritesSheet
 
 

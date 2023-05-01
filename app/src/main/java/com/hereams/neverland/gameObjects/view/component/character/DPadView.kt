@@ -1,4 +1,4 @@
-package com.hereams.neverland.gameObjects.view.component
+package com.hereams.neverland.gameObjects.view.component.character
 
 import android.graphics.Canvas
 import android.graphics.Color

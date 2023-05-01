@@ -1,6 +1,6 @@
 package com.hereams.neverland.gameObjects.view.component.map
 
-import com.hereams.neverland.gameObjects.view.component.EnemyView
+import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
 
 abstract class GameMap {
 

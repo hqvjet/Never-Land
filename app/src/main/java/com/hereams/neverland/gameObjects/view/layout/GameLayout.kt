@@ -2,13 +2,14 @@ package com.hereams.neverland.gameObjects.view.layout
 
 import android.content.Context
 import android.graphics.PointF
-import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.FrameLayout
 import com.hereams.neverland.constant.CIRCLE_RADIUS
 import com.hereams.neverland.gameObjects.Game
-import com.hereams.neverland.gameObjects.view.component.*
+import com.hereams.neverland.gameObjects.view.component.character.AttackButtonView
+import com.hereams.neverland.gameObjects.view.component.character.CharacterView
+import com.hereams.neverland.gameObjects.view.component.character.DPadView
 import com.hereams.neverland.gameObjects.view.component.inventory.InventoryButton
 import com.hereams.neverland.gameObjects.view.component.inventory.InventoryView
 
@@ -47,7 +48,7 @@ class GameLayout(context: Context) : FrameLayout(context) {
         )
 
         inventory_view = InventoryView(
-            this.context,
+            this,
             screen
         )
 

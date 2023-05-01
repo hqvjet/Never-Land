@@ -103,6 +103,7 @@ class InventoryButton(
                     changeBackgroundColor(Color.RED)
                     postInvalidate()
                     drawButton()
+                    view.update()
                     layout.addView(view)
                 }
 
