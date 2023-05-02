@@ -2,6 +2,7 @@ package com.hereams.neverland.gameObjects.view.component.enemy.enemy_list
 
 import android.content.Context
 import android.graphics.PointF
+import com.hereams.neverland.gameObjects.model.Character
 import com.hereams.neverland.gameObjects.model.Inventory
 import com.hereams.neverland.gameObjects.view.component.character.CharacterView
 import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
@@ -25,10 +26,6 @@ class Skeleton(
     }
 
     override fun drop(character_inventory: Inventory) {
-        // get drop list
-        // calc item drop rate
-        // get item by drop rate
-        // add to inventory
 
         val drop_rate = model.getEnemyItemDropRate()
         val random = Math.random()
@@ -37,6 +34,14 @@ class Skeleton(
             character_inventory.addItem(drop_list.random())
         }
 
+    }
+
+    override fun expGain(): Int {
+        return model.getEnemyEXPAmount()
+    }
+
+    override fun goldGain(): Int {
+        return model.getEnemyGoldAmount()
     }
 
 }

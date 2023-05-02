@@ -14,8 +14,9 @@ class Enemy(
     private lateinit var enemy_hp: Number
     private lateinit var enemy_move_speed: Number
     private lateinit var enemy_attack_speed: Number
-    private lateinit var enemy_item_drop: MutableList<com.hereams.neverland.gameObjects.view.component.item.Item>
     private var enemy_drop_rate: Double = 0.0
+    private var enemy_exp_amount: Int = 0
+    private var enemy_gold_amount: Int = 0
 
     init {
         enemy_name = ENEMY_NAME[enemy_id]
@@ -27,6 +28,8 @@ class Enemy(
         enemy_move_speed = ENEMY_MOVE_SPEED[enemy_id]
         enemy_attack_speed = ENEMY_ATTACK_SPEED[enemy_id]
         enemy_drop_rate = ENEMY_ITEM_DROP_RATE[enemy_id]
+        enemy_exp_amount = ENEMY_EXP_AMOUNT[enemy_id]
+        enemy_gold_amount = ENEMY_GOLD_AMOUNT[enemy_id]
     }
 
     fun getEnemyName() = enemy_name
@@ -71,5 +74,13 @@ class Enemy(
 
     fun getEnemyItemDropRate(): Double {
         return enemy_drop_rate
+    }
+
+    fun getEnemyEXPAmount(): Int {
+        return enemy_exp_amount
+    }
+
+    fun getEnemyGoldAmount(): Int {
+        return enemy_gold_amount
     }
 }

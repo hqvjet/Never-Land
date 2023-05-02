@@ -178,4 +178,12 @@ class CharacterView(
 //        inventory.addItem(potion)
 //    }
 
+    fun gainEXPFromEnemy(exp_amount: Int) {
+        model.setPlayerExp(exp_amount)
+    }
+
+    fun gainGoldFromEnemy(gold_amount: Int) {
+        inventory.setInventoryGold(gold_amount)
+    }
+
 }

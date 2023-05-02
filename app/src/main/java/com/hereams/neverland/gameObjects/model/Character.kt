@@ -5,8 +5,8 @@ import com.hereams.neverland.constant.*
 class Character {
 
     private lateinit var player_name: String
-    private lateinit var player_level: Number
-    private lateinit var player_exp: Number
+    private var player_level: Int = 1
+    private var player_exp: Int = 0
     private lateinit var player_class: String
     private lateinit var current_floor: Number
     private lateinit var savepoint: Number
@@ -38,8 +38,16 @@ class Character {
     }
 
     fun getPlayerExp() = player_exp
+
+    /**
+     * This function will calc the amount needed for level up character
+     */
     fun setPlayerExp(value: Int) {
-        player_exp = value
+        player_exp += value
+        while(player_exp >= player_level * 20) {
+            player_exp -= player_level + 20
+            ++player_level
+        }
     }
 
     fun getPlayerClass() = player_class

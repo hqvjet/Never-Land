@@ -197,4 +197,14 @@ abstract class EnemyView(
      */
     abstract fun drop(character_inventory: Inventory)
 
+    /**
+     *  Use for gaining EXP when enemy died
+     */
+    abstract fun expGain(): Int
+
+    /**
+     *  Use for gaining gold when enemy died
+     */
+    abstract fun goldGain(): Int
+
 }

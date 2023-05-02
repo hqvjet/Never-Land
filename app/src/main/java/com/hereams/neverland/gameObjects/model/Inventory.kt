@@ -4,7 +4,7 @@ class Inventory(
     slot: Int, gold: Int,
 ) {
     private lateinit var inventory_slot: Number
-    private lateinit var inventory_gold: Number
+    private var inventory_gold: Int = 0
     private lateinit var inventory_items: MutableList<com.hereams.neverland.gameObjects.view.component.item.Item>
 
     init {
@@ -20,7 +20,7 @@ class Inventory(
 
     fun getInventoryGold() = inventory_gold
     fun setInventoryGold(value: Int) {
-        inventory_gold = value
+        inventory_gold += value
     }
 
     fun addItem(item: com.hereams.neverland.gameObjects.view.component.item.Item) {

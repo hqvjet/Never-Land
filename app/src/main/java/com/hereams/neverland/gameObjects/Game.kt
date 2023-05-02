@@ -123,9 +123,11 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
                 if (Circle.isColliding(character, enemy_list[i])) {
                     character.attack(enemy_list[i])
 
-                    //enemy died -> remove, get item(s)
+                    //enemy died -> drop item, gain exp, gain gold, remove
                     if(enemy_list[i].model.getEnemyHp().toInt() <= 0) {
                         enemy_list[i].drop(character.inventory)
+                        character.gainGoldFromEnemy(enemy_list[i].goldGain())
+                        character.gainEXPFromEnemy(enemy_list[i].expGain())
                         tile_map.removeEnemy(i)
                         enemy_list = tile_map.getEnemy()
                         --size
