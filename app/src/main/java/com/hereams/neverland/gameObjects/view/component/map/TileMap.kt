@@ -13,10 +13,12 @@ class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
     private lateinit var map: Bitmap
     private lateinit var row: Number
     private lateinit var column: Number
-    private lateinit var tile_map: Array<Array<Tile?>>
+    private lateinit var tile_map: MutableList<MutableList<Tile>>
     private lateinit var enemy: MutableList<EnemyView>
+    private lateinit var obstacle_list: MutableList<Tile>
 
     init {
+        obstacle_list = mutableListOf()
         initializeTileMap()
         enemy = map_layout.getEnemy()
     }
@@ -26,15 +28,23 @@ class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
         row = map_layout.getNumberOfRowTiles()
         column = map_layout.getNumberOfColumnTiles()
 
-        tile_map = Array(column.toInt()) { arrayOfNulls<Tile?>(row.toInt()) }
+        tile_map = mutableListOf()
         for (i in 0 until column.toInt()) {
+            var row_list: MutableList<Tile> = mutableListOf()
             for (j in 0 until row.toInt()) {
-                tile_map[i][j] = Tile.getTile(
-                    layout[i][j],
-                    spritesSheet,
-                    getRectByIndex(i, j)
-                )!!
+                row_list.add(
+                    Tile.getTile(
+                        layout[i][j],
+                        spritesSheet,
+                        getRectByIndex(i, j)
+                    )!!
+                )
+
+                //check for obstacles
+                if (row_list[j]?.isObstacle() == true)
+                    obstacle_list.add(row_list[j])
             }
+            tile_map.add(row_list)
         }
 
         val config = Bitmap.Config.ARGB_8888
@@ -69,6 +79,10 @@ class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
             (idxCol + 1) * SPRITES_SIZE,
             (idxRow + 1) * SPRITES_SIZE
         )
+    }
+
+    fun getObstacles(): MutableList<Tile> {
+        return obstacle_list
     }
 
     fun getEnemy(): MutableList<EnemyView> {

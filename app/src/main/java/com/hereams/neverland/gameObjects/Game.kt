@@ -21,6 +21,7 @@ import com.hereams.neverland.gameObjects.view.component.character.InfoBox
 import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
 import com.hereams.neverland.gameObjects.view.component.inventory.ItemView
 import com.hereams.neverland.gameObjects.view.component.item.SteelSword
+import com.hereams.neverland.gameObjects.view.component.map.Tile
 import com.hereams.neverland.gameObjects.view.component.map.map_list.TheHallWay
 import com.hereams.neverland.gameObjects.view.component.map.TileMap
 import com.hereams.neverland.graphics.GameDisplay
@@ -41,6 +42,7 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
     //Entities
     private lateinit var infoBox: InfoBox
     private lateinit var tile_map: TileMap
+    private lateinit var obstacle_list: MutableList<Tile>
     lateinit var enemy_list: MutableList<EnemyView>
 
     //Game loop
@@ -76,6 +78,7 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
         //init maps, tilemap with enemies inside
         the_hall_way = TheHallWay(this.context, character)
         tile_map = TileMap(earth_sprite_sheet, the_hall_way)
+        obstacle_list = tile_map.getObstacles()
         enemy_list = tile_map.getEnemy()
 
         // Initialize display and center it around the player
@@ -109,9 +112,9 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
 
         dpad.update()
         for (i in 0 until enemy_list.size)
-            enemy_list[i].update(fps)
+            enemy_list[i].update(fps, obstacle_list)
 
-        character.update(fps)
+        character.update(fps, obstacle_list)
         infoBox.update()
         game_display.update()
 

@@ -40,10 +40,10 @@ class TheHallWay(val context: Context, val player: CharacterView) : GameMap() {
     private fun initializeLayout() {
         layout = arrayOf(
             arrayOf(0, 0, 0, 0, 0),
+            arrayOf(0, 1, 0, 0, 0),
+            arrayOf(0, 0, 1, 0, 0),
             arrayOf(0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0)
+            arrayOf(0, 0, 0, 0, 1)
         )
     }
 

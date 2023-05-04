@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PointF
+import android.graphics.Rect
 import com.hereams.neverland.R
 import com.hereams.neverland.constant.*
 import com.hereams.neverland.gameObjects.model.Enemy
@@ -11,6 +12,7 @@ import com.hereams.neverland.gameObjects.model.Inventory
 import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.gameObjects.view.component.character.CharacterView
 import com.hereams.neverland.gameObjects.view.component.Circle
+import com.hereams.neverland.gameObjects.view.component.map.Tile
 import com.hereams.neverland.graphics.Animator
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
@@ -125,7 +127,7 @@ abstract class EnemyView(
         animator.draw(canvas, gameDisplay, this)
     }
 
-    override fun update(fps: Float) {
+    override fun update(fps: Float, obstacle_list: MutableList<Tile>) {
         FPS = fps
         if (!ready_to_attack)
             ++count
@@ -163,8 +165,7 @@ abstract class EnemyView(
         // =========================================================================================
         //   Update position of the enemy
         // =========================================================================================
-        position.x += velocity.x
-        position.y += velocity.y
+        handlingIsBlockedByObstacle(obstacle_list)
 
         state.update()
         animator.update(fps)

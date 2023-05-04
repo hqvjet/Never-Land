@@ -25,3 +25,6 @@ val CIRCLE_RADIUS = 64f + 16f
 val MAX_FPS: Double = 60.0
 val MAX_UPS:Double = 60.0
 val UPS_PERIOD: Double = 1000 / MAX_UPS
+
+val TILE_MOVEABLE = "MOVEABLE"
+val TILE_IMMOVEABLE = "IMMOVEABLE"

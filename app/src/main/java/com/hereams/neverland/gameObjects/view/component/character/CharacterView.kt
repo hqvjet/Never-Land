@@ -4,12 +4,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PointF
+import android.graphics.Rect
 import com.hereams.neverland.R
 import com.hereams.neverland.constant.*
 import com.hereams.neverland.gameObjects.model.*
 import com.hereams.neverland.gameObjects.states.LivingAnimationObjectState
 import com.hereams.neverland.gameObjects.view.component.Circle
 import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
+import com.hereams.neverland.gameObjects.view.component.map.Tile
 import com.hereams.neverland.graphics.Animator
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
@@ -122,7 +124,7 @@ class CharacterView(
         return MAX_HP.toInt()
     }
 
-    override fun update(fps: Float) {
+    override fun update(fps: Float, obstacle_list: MutableList<Tile>) {
         if (!ready_to_attack)
             ++count
         if (count >= fps / model.getAttackSpeed().toFloat()) {
@@ -138,18 +140,20 @@ class CharacterView(
             velocity.x = 0f
             velocity.y = 0f
         }
-        // Update position
-        position.x += velocity.x
-        position.y += velocity.y
 
-        // Update direction
-        if (velocity.x !== 0f || velocity.y !== 0f) {
-            // Normalize velocity to get direction (unit vector of velocity)
-            val distance: Float = Utils().getDistanceBetweenPoints(0f, 0f, velocity.x, velocity.y)
-        }
+        handlingIsBlockedByObstacle(obstacle_list)
+        println(obstacle_list.size)
 
-        state.update()
-        animator.update(fps)
+            // Update direction
+            if (velocity.x !== 0f || velocity.y !== 0f) {
+                // Normalize velocity to get direction (unit vector of velocity)
+                val distance: Float =
+                    Utils().getDistanceBetweenPoints(0f, 0f, velocity.x, velocity.y)
+            }
+
+            state.update()
+            animator.update(fps)
+
     }
 
     override fun draw(canvas: Canvas?, gameDisplay: GameDisplay) {
@@ -163,7 +167,15 @@ class CharacterView(
     fun attack(target: EnemyView) {
         action = ACTION_ATTACK
         state.update()
-        target.isDamaged(model.getPlayerAttack().toInt())
+        val pure_damage_dealt =
+            (model.getPlayerAttack().toInt() + (5 * model.getPlayerLevel())) + model.getWeapon()
+                .getWeaponAttack().toInt()
+
+        val enemy_def_by_percent =
+            1 - (target.model.getEnemyDef().toFloat() / pure_damage_dealt.toFloat()).toInt()
+
+        val damage_dealt = max(1, pure_damage_dealt / enemy_def_by_percent)
+        target.isDamaged(damage_dealt)
     }
 
     fun setItems(items: Array<com.hereams.neverland.gameObjects.view.component.item.Item>) {

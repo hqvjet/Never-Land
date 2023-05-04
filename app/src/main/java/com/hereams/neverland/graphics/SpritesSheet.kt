@@ -93,13 +93,18 @@ class SpritesSheet(
         return spritesArray
     }
 
+    fun getBitmap(): Bitmap {
+        return bitmap
+    }
     fun getEarthSprites(): Array<Sprites> {
         return arrayOf(
             Sprites(this, Rect(SPRITES_SIZE, SPRITES_SIZE, SPRITES_SIZE * 2, SPRITES_SIZE * 2))
         )
     }
 
-    fun getBitmap(): Bitmap {
-        return bitmap
+    fun getHoleSprites(): Array<Sprites> {
+        return arrayOf(
+            Sprites(this, Rect(SPRITES_SIZE * 6, 0, SPRITES_SIZE * 7, SPRITES_SIZE))
+        )
     }
 }
