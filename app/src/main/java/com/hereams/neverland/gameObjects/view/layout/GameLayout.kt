@@ -12,6 +12,8 @@ import com.hereams.neverland.gameObjects.view.component.character.CharacterView
 import com.hereams.neverland.gameObjects.view.component.character.DPadView
 import com.hereams.neverland.gameObjects.view.component.inventory.InventoryButton
 import com.hereams.neverland.gameObjects.view.component.inventory.InventoryView
+import com.hereams.neverland.gameObjects.view.component.stat.StatButton
+import com.hereams.neverland.gameObjects.view.component.stat.StatView
 
 class GameLayout(context: Context) : FrameLayout(context) {
 
@@ -20,9 +22,11 @@ class GameLayout(context: Context) : FrameLayout(context) {
     private lateinit var dpad: DPadView
     private lateinit var character: CharacterView
     private lateinit var inventory_button: InventoryButton
+    private lateinit var stat_button: StatButton
 
     //features
     private lateinit var inventory_view: InventoryView
+    private lateinit var stat_view: StatView
 //    private lateinit var self
 
     init {
@@ -52,10 +56,24 @@ class GameLayout(context: Context) : FrameLayout(context) {
             screen
         )
 
+        stat_view = StatView(
+            this,
+            screen
+        )
+
         inventory_button = InventoryButton(
             this,
             inventory_view,
             PointF((screen.x * 0.75).toFloat(), (screen.y * 0.8).toFloat()),
+            PointF(10f, 10f),
+            PointF(50f, 50f),
+            50f
+        )
+
+        stat_button = StatButton(
+            this,
+            stat_view,
+            PointF((screen.x * 0.65).toFloat(), (screen.y * 0.8).toFloat()),
             PointF(10f, 10f),
             PointF(50f, 50f),
             50f
@@ -73,6 +91,7 @@ class GameLayout(context: Context) : FrameLayout(context) {
         )
 
         inventory_view.setOwner(character)
+        stat_view.setOwner(character)
 
         attack_button = AttackButtonView(
             this.context,
@@ -93,6 +112,7 @@ class GameLayout(context: Context) : FrameLayout(context) {
         game = Game(this.context, dpad, character, attack_button)
 
         addView(game, layoutParams_full)
+        addView(stat_button, layoutParams_wrap)
         addView(inventory_button, layoutParams_wrap)
         addView(attack_button, layoutParams_wrap)
     }

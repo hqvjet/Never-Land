@@ -56,7 +56,6 @@ class TheHallWay(val context: Context, val player: CharacterView) : GameMap() {
             Skeleton(context, SKELETON, player, PointF(1000f, 60f), CIRCLE_RADIUS)
         )
 
-
     }
 
 }
