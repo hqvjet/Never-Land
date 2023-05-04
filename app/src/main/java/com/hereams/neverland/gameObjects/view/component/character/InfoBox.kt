@@ -21,7 +21,6 @@ class InfoBox(context: Context, val owner: CharacterView) {
     private val height: Array<Float> = arrayOf(150f, 30f)
     private val margin_top = 15f
     private val margin_left = 25f
-    private var hp_scale: Float = 1f
 
     init {
         border_paint.color = Color.YELLOW
@@ -36,6 +35,11 @@ class InfoBox(context: Context, val owner: CharacterView) {
         // container
         canvas?.drawRect(0f, 0f, width[background_id], height[background_id], background_paint)
 
+        val hp_scale = owner.model.getPlayerHp().toFloat() / owner.model.getPlayerMaxHp()
+        val exp_scale = owner.model.getPlayerExp().toFloat() / owner.model.getPlayerExpRequiredToLevelUp()
+
+        println("${owner.model.getPlayerExp()} ${owner.model.getPlayerExpRequiredToLevelUp()}")
+
         //hp
         canvas?.drawRect(
             margin_left,
@@ -45,11 +49,11 @@ class InfoBox(context: Context, val owner: CharacterView) {
             hp_paint
         )
 
-        //mp
+        //exp
         canvas?.drawRect(
             margin_left,
             margin_top * 2 + height[hp_id],
-            width[hp_id] + margin_left,
+            width[hp_id] * exp_scale + margin_left,
             margin_top * 2 + height[hp_id] * 2,
             exp_paint
         )
@@ -59,10 +63,6 @@ class InfoBox(context: Context, val owner: CharacterView) {
             "Level: ${owner.model.getPlayerLevel()}",
             margin_left, margin_top * 3 + height[hp_id] * 3, info_text_paint
         )
-    }
-
-    fun update() {
-        hp_scale = owner.model.getPlayerHp().toFloat() / owner.getMaxCharacterHP().toFloat()
     }
 
 }

@@ -6,7 +6,7 @@ val THE_FORGOTTEN_WARRIOR = 2
 
 val ENEMY_NAME = arrayOf("Skeleton", "Golden Ghost", "The Forgotten Warrior")
 val ENEMY_HP = arrayOf(100f, 150f, 1500f)
-val ENEMY_DEF = arrayOf(10f, 20f, 100f)
+val ENEMY_DEF = arrayOf(0f, 5f, 100f)
 val ENEMY_ATK = arrayOf(2f, 4f, 10f)
 val ENEMY_MOVE_SPEED = arrayOf(5f, 8f, 6f)
 val ENEMY_CLASSIFY = arrayOf(COMMON, ELITE, LEGENDARY)
@@ -19,7 +19,7 @@ val ENEMY_ITEM_DROP_RATE = arrayOf(
 )
 
 val ENEMY_EXP_AMOUNT = arrayOf(
-    100,
+    90,
     15,
     150
 )

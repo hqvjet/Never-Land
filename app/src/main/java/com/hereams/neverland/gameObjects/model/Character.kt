@@ -11,8 +11,8 @@ class Character {
     private lateinit var current_floor: Number
     private lateinit var savepoint: Number
     private lateinit var player_attack: Number
-    private lateinit var player_def: Number
-    private lateinit var player_hp: Number
+    private var player_def = 0
+    private var player_hp = 0
     private lateinit var statpoint: Number
     private lateinit var VIT: Number
     private lateinit var STR: Number
@@ -38,16 +38,23 @@ class Character {
     }
 
     fun getPlayerExp() = player_exp
-
+    fun getPlayerExpRequiredToLevelUp() = player_level * 20
     /**
      * This function will calc the amount needed for level up character
      */
     fun setPlayerExp(value: Int) {
         player_exp += value
         while(player_exp >= player_level * 20) {
-            player_exp -= player_level + 20
+            player_exp -= player_level * 20
             ++player_level
+            levelUp()
         }
+    }
+
+    private fun levelUp() {
+        player_attack = (BASE_ATTACK[class_id.toInt()] + 5 * player_level) + weapon.getWeaponAttack().toInt()
+        player_hp = BASE_HP[class_id.toInt()] + 40 * player_level
+        player_def = BASE_DEF[class_id.toInt()] + player_level
     }
 
     fun getPlayerClass() = player_class
@@ -71,14 +78,15 @@ class Character {
     }
 
     fun getPlayerDef() = player_def
-    fun setPlayerDef(value: Number) {
+    fun setPlayerDef(value: Int) {
         player_def = value
     }
 
     fun getPlayerHp() = player_hp
-    fun setPlayerHp(value: Number) {
+    fun setPlayerHp(value: Int) {
         player_hp = value
     }
+    fun getPlayerMaxHp() = BASE_HP[class_id.toInt()] + 40 * player_level
 
     fun getStatPoint() = statpoint
     fun setStatPoint(value: Number) {
@@ -153,15 +161,15 @@ class Character {
         setPlayerClass(CLASS_NAME[class_id])
         setCurrentFloor(floor)
         setSavepoint(savePoint)
-        setPlayerAttack(BASE_ATTACK[class_id])
+        setWeapon(weapon)
+        setPlayerAttack(BASE_ATTACK[class_id] + weapon.getWeaponAttack().toInt())
         setPlayerDef(BASE_DEF[class_id])
-        setPlayerHp(BASE_HP[class_id])
+        setPlayerHp(BASE_HP[class_id] + 40 * player_level)
         setVIT(VIT)
         setINT(INT)
         setSTR(STR)
         setDEX(DEX)
         setCRT(CRT)
-        setWeapon(weapon)
         setInventory(inventory)
         setOption(option)
         setMoveSpeed(BASE_MOVE[class_id])

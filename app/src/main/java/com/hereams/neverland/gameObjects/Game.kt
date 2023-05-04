@@ -115,7 +115,6 @@ class Game(context: Context, val dpad: DPadView, val character: CharacterView, v
             enemy_list[i].update(fps, obstacle_list)
 
         character.update(fps, obstacle_list)
-        infoBox.update()
         game_display.update()
 
         var size = enemy_list.size

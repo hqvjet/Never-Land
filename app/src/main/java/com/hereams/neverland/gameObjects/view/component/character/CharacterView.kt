@@ -161,20 +161,14 @@ class CharacterView(
     }
 
     fun isDamaged(damaged: Int) {
-        model.setPlayerHp(max(0f, model.getPlayerHp().toInt() - damaged.toFloat()))
+        model.setPlayerHp(max(0, model.getPlayerHp() - damaged))
     }
 
     fun attack(target: EnemyView) {
         action = ACTION_ATTACK
         state.update()
-        val pure_damage_dealt =
-            (model.getPlayerAttack().toInt() + (5 * model.getPlayerLevel())) + model.getWeapon()
-                .getWeaponAttack().toInt()
 
-        val enemy_def_by_percent =
-            1 - (target.model.getEnemyDef().toFloat() / pure_damage_dealt.toFloat()).toInt()
-
-        val damage_dealt = max(1, pure_damage_dealt / enemy_def_by_percent)
+        val damage_dealt = max(1, model.getPlayerAttack().toInt() - target.model.getEnemyDef().toFloat().toInt())
         target.isDamaged(damage_dealt)
     }
 

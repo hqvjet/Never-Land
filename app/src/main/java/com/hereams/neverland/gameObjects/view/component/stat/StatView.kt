@@ -158,6 +158,41 @@ class StatView(
             stat_paint
         )
 
+        canvas?.drawText(
+            "ATK: ${model.getPlayerAttack()}",
+            (stat_rect.left + 60).toFloat(),
+            (stat_rect.top + 60).toFloat(),
+            text_paint
+            )
+
+        canvas?.drawText(
+            "HP: ${model.getPlayerHp().toInt()}",
+            (stat_rect.left + 60).toFloat(),
+            (stat_rect.top + 60 + 30).toFloat(),
+            text_paint
+        )
+
+        canvas?.drawText(
+            "DEF: ${model.getPlayerDef()}",
+            (stat_rect.left + 60).toFloat(),
+            (stat_rect.top + 60 + 60).toFloat(),
+            text_paint
+        )
+
+        canvas?.drawText(
+            "ATK Speed: ${model.getAttackSpeed()}",
+            (stat_rect.left + 60).toFloat(),
+            (stat_rect.top + 60 + 90).toFloat(),
+            text_paint
+        )
+
+        canvas?.drawText(
+            "Movement: ${model.getMoveSpeed()}",
+            (stat_rect.left + 60).toFloat(),
+            (stat_rect.top + 60 + 120).toFloat(),
+            text_paint
+        )
+
         //draw increase field
         canvas?.drawRect(
             increase_stat_rect,

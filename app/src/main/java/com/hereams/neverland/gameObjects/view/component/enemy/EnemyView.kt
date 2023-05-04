@@ -17,6 +17,7 @@ import com.hereams.neverland.graphics.Animator
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
 import java.lang.Float.max
+import kotlin.math.max
 
 
 abstract class EnemyView(
@@ -178,7 +179,7 @@ abstract class EnemyView(
     fun attack(target: CharacterView) {
         action = ACTION_ATTACK
         state.update()
-        target.isDamaged(model.getEnemyAttack().toInt())
+        target.isDamaged(max(1, model.getEnemyAttack().toInt() - target.model.getPlayerDef().toInt()))
     }
 
     fun move() {
@@ -189,7 +190,7 @@ abstract class EnemyView(
     }
 
     fun isDamaged(damage: Int) {
-        model.setEnemyHp(max(0f, (model.getEnemyHp().toInt() - damage).toFloat()))
+        model.setEnemyHp(max(0, model.getEnemyHp().toInt() - damage))
         hp_bar.update()
     }
 
