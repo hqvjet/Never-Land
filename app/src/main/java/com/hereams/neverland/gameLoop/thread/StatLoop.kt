@@ -40,7 +40,6 @@ class StatLoop(private val stat: StatView, private val surfaceHolder: SurfaceHol
                 stat.postInvalidate()
                 canvas = surfaceHolder.lockCanvas()
                 synchronized(surfaceHolder) {
-//                    inventory.update()
                     ++updateCount
                     stat.draw(canvas)
                 }

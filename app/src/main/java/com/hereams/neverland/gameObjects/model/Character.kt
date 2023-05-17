@@ -13,12 +13,12 @@ class Character {
     private lateinit var player_attack: Number
     private var player_def = 0
     private var player_hp = 0
-    private lateinit var statpoint: Number
-    private lateinit var VIT: Number
-    private lateinit var STR: Number
-    private lateinit var DEX: Number
-    private lateinit var INT: Number
-    private lateinit var CRT: Number
+    private var statpoint: Int = 0
+    private var VIT: Int = 0
+    private var STR: Int = 0
+    private var DEX: Int = 0
+    private var INT: Int = 0
+    private var CRT: Int = 0
     private lateinit var player_move_speed: Number
     private lateinit var player_attack_speed: Number
     private lateinit var class_id: Number
@@ -52,9 +52,10 @@ class Character {
     }
 
     private fun levelUp() {
-        player_attack = (BASE_ATTACK[class_id.toInt()] + 5 * player_level) + weapon.getWeaponAttack().toInt()
-        player_hp = BASE_HP[class_id.toInt()] + 40 * player_level
-        player_def = BASE_DEF[class_id.toInt()] + player_level
+        player_attack = (BASE_ATTACK[class_id.toInt()] + (STR / 5 + DEX / 3 + VIT / 10 + INT / 20 + 3) * player_level) + weapon.getWeaponAttack().toInt()
+        player_hp = BASE_HP[class_id.toInt()] + (20 + VIT + INT / 2 + STR / 2 ) * player_level
+        player_def = BASE_DEF[class_id.toInt()] + (STR / 5 + DEX / 3 + VIT / 10 + INT / 20 + 1) * player_level
+        ++ statpoint
     }
 
     fun getPlayerClass() = player_class
@@ -86,35 +87,35 @@ class Character {
     fun setPlayerHp(value: Int) {
         player_hp = value
     }
-    fun getPlayerMaxHp() = BASE_HP[class_id.toInt()] + 40 * player_level
+    fun getPlayerMaxHp() = BASE_HP[class_id.toInt()] + (20 + VIT + INT / 2 + STR / 2 ) * player_level
 
     fun getStatPoint() = statpoint
-    fun setStatPoint(value: Number) {
+    fun setStatPoint(value: Int) {
         statpoint = value
     }
 
     fun getVIT() = VIT
-    fun setVIT(value: Number) {
+    fun setVIT(value: Int) {
         VIT = value
     }
 
     fun getSTR() = STR
-    fun setSTR(value: Number) {
+    fun setSTR(value: Int) {
         STR = value
     }
 
     fun getDEX() = DEX
-    fun setDEX(value: Number) {
+    fun setDEX(value: Int) {
         DEX = value
     }
 
     fun getINT() = INT
-    fun setINT(value: Number) {
+    fun setINT(value: Int) {
         INT = value
     }
 
     fun getCRT() = CRT
-    fun setCRT(value: Number) {
+    fun setCRT(value: Int) {
         CRT = value
     }
 
@@ -162,9 +163,9 @@ class Character {
         setCurrentFloor(floor)
         setSavepoint(savePoint)
         setWeapon(weapon)
-        setPlayerAttack(BASE_ATTACK[class_id] + weapon.getWeaponAttack().toInt())
-        setPlayerDef(BASE_DEF[class_id])
-        setPlayerHp(BASE_HP[class_id] + 40 * player_level)
+        setPlayerAttack((BASE_ATTACK[class_id] + (STR / 5 + DEX / 3 + VIT / 10 + INT / 20 + 3) * player_level) + weapon.getWeaponAttack().toInt())
+        setPlayerDef(BASE_DEF[class_id] + (STR / 5 + DEX / 3 + VIT / 10 + INT / 20 + 1) * player_level)
+        setPlayerHp(BASE_HP[class_id] + (20 + VIT + INT / 2 + STR / 2 ) * player_level)
         setVIT(VIT)
         setINT(INT)
         setSTR(STR)

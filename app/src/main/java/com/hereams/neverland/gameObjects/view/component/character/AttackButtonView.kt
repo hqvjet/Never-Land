@@ -91,31 +91,32 @@ class AttackButtonView(
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val touched_position: PointF = PointF(event.x, event.y)
         // Handle user input touch event actions
-        when (event!!.actionMasked) {
-            MotionEvent.ACTION_DOWN -> {
-                //touched in attack button range
-                if (isPressed(touched_position)) {
-                    setIsPressed(true)
-                    changeBackgroundColor(Color.RED)
-                    postInvalidate()
-                    drawButton()
-                }
-
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
-                if (getIsPressed()) {
-                    if (getIsPressed()) {
-                        setIsPressed(false)
-                        changeBackgroundColor(Color.BLUE)
+        if (character.model.getPlayerHp() != 0)
+            when (event!!.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    //touched in attack button range
+                    if (isPressed(touched_position)) {
+                        setIsPressed(true)
+                        changeBackgroundColor(Color.RED)
                         postInvalidate()
                         drawButton()
                     }
 
+                    return true
                 }
-                return true
+                MotionEvent.ACTION_UP -> {
+                    if (getIsPressed()) {
+                        if (getIsPressed()) {
+                            setIsPressed(false)
+                            changeBackgroundColor(Color.BLUE)
+                            postInvalidate()
+                            drawButton()
+                        }
+
+                    }
+                    return true
+                }
             }
-        }
 
         return super.onTouchEvent(event)
 

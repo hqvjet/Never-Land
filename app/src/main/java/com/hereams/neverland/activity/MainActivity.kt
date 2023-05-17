@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     // run first
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        supportActionBar?.hide()
+        supportActionBar?.hide()
 
         val window: Window = window
         window.setFlags(

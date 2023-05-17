@@ -105,7 +105,7 @@ class CharacterView(
         animator = Animator(movementSpritesSheetArray)
         state = LivingAnimationObjectState(this)
         model = Character(
-            "Jack", 1, 1, KNIGHT, 1, 1,
+            "Jack", 1, 0, KNIGHT, 1, 1,
             1, 1, 1, 1, 1,
             Weapon(STEEL_SWORD, 1),
             inventory,

@@ -8,7 +8,7 @@ import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
 import com.hereams.neverland.graphics.GameDisplay
 import com.hereams.neverland.graphics.SpritesSheet
 
-class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
+class TileMap(val spritesSheet_array: MutableList<SpritesSheet>, val map_layout: GameMap) {
 
     private lateinit var map: Bitmap
     private lateinit var row: Number
@@ -32,13 +32,19 @@ class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
         for (i in 0 until column.toInt()) {
             var row_list: MutableList<Tile> = mutableListOf()
             for (j in 0 until row.toInt()) {
-                row_list.add(
-                    Tile.getTile(
-                        layout[i][j],
-                        spritesSheet,
-                        getRectByIndex(i, j)
-                    )!!
-                )
+                try {
+                    row_list.add(
+                        Tile.getTile(
+                            layout[i][j],
+                            spritesSheet_array[layout[i][j]],
+                            getRectByIndex(i, j)
+                        )!!
+                    )
+                }
+                catch (e: java.lang.NullPointerException) {
+                    println("$i $j")
+                }
+
 
                 //check for obstacles
                 if (row_list[j]?.isObstacle() == true)
@@ -91,6 +97,11 @@ class TileMap(val spritesSheet: SpritesSheet, val map_layout: GameMap) {
 
     fun removeEnemy(index: Int) {
         enemy.removeAt(index)
+    }
+
+    fun reviveAll() {
+        map_layout.initializeEnemy()
+        enemy = map_layout.getEnemy()
     }
 
 }

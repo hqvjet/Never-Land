@@ -8,15 +8,21 @@ import com.hereams.neverland.gameObjects.view.component.character.CharacterView
 import com.hereams.neverland.gameObjects.view.component.enemy.EnemyView
 import com.hereams.neverland.gameObjects.view.component.enemy.enemy_list.Skeleton
 import com.hereams.neverland.gameObjects.view.component.map.GameMap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class TheHallWay(val context: Context, val player: CharacterView) : GameMap() {
-    private val NUMBER_OF_ROW_TILES = 5
-    private val NUMBER_OF_COLUMN_TILES = 5
+    private val NUMBER_OF_ROW_TILES = 10
+    private val NUMBER_OF_COLUMN_TILES = 10
     private lateinit var enemy: MutableList<EnemyView>
 
     private lateinit var layout: Array<Array<Int>>
 
+    private lateinit var thread: Thread
+
     init {
+        enemy = mutableListOf()
         initializeLayout()
         initializeEnemy()
     }
@@ -39,23 +45,34 @@ class TheHallWay(val context: Context, val player: CharacterView) : GameMap() {
 
     private fun initializeLayout() {
         layout = arrayOf(
-            arrayOf(0, 0, 0, 0, 0),
-            arrayOf(0, 1, 0, 0, 0),
-            arrayOf(0, 0, 1, 0, 0),
-            arrayOf(0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 1)
+            arrayOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+            arrayOf(1, 0, 2, 0, 0, 8, 0, 0, 0, 1),
+            arrayOf(1, 0, 0, 0, 0, 8, 0, 0, 0, 1),
+            arrayOf(1, 4, 0, 0, 6, 8, 0, 0, 0, 1),
+            arrayOf(1, 0, 1, 0, 1, 8, 0, 0, 0, 1),
+            arrayOf(1, 0, 0, 0, 5, 8, 1, 0, 4, 1),
+            arrayOf(1, 1, 2, 0, 0, 8, 2, 0, 4, 1),
+            arrayOf(1, 0, 0, 0, 0, 8, 0, 3, 0, 1),
+            arrayOf(1, 4, 0, 0, 6, 8, 0, 0, 0, 1),
+            arrayOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
     }
 
-    private fun initializeEnemy() {
-        enemy = mutableListOf(
-            Skeleton(context, SKELETON, player, PointF(0f, 0f), CIRCLE_RADIUS),
-            Skeleton(context, SKELETON, player, PointF(30f, 60f), CIRCLE_RADIUS),
-            Skeleton(context, SKELETON, player, PointF(200f, 400f), CIRCLE_RADIUS),
-            Skeleton(context, SKELETON, player, PointF(300f, 600f), CIRCLE_RADIUS),
-            Skeleton(context, SKELETON, player, PointF(1000f, 60f), CIRCLE_RADIUS)
-        )
+    override fun initializeEnemy() {
+        val initThread = Thread {
+
+            synchronized(enemy) {
+                enemy = mutableListOf(
+                    Skeleton(context, SKELETON, player, PointF(1000f, 1000f), CIRCLE_RADIUS),
+                    Skeleton(context, SKELETON, player, PointF(2000f, 300f), CIRCLE_RADIUS),
+                    Skeleton(context, SKELETON, player, PointF(2000f, 4000f), CIRCLE_RADIUS),
+                    Skeleton(context, SKELETON, player, PointF(3000f, 3000f), CIRCLE_RADIUS),
+                    Skeleton(context, SKELETON, player, PointF(1000f, 1500f), CIRCLE_RADIUS)
+                )
+            }
+
+        }
+        initThread.start()
 
     }
-
 }

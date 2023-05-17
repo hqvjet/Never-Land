@@ -114,7 +114,7 @@ abstract class EnemyView(
 
         model = Enemy(1, enemy_id)
 
-        MAX_HP = model.getEnemyHp()
+        MAX_HP = model.getEnemyHp().toInt() * target.model.getPlayerLevel()
 
         MAX_SPEED = model.getEnemyMoveSpeed()
 
@@ -163,9 +163,8 @@ abstract class EnemyView(
             velocity.y = 0f
         }
 
-        // =========================================================================================
+
         //   Update position of the enemy
-        // =========================================================================================
         handlingIsBlockedByObstacle(obstacle_list)
 
         state.update()
@@ -179,7 +178,13 @@ abstract class EnemyView(
     fun attack(target: CharacterView) {
         action = ACTION_ATTACK
         state.update()
-        target.isDamaged(max(1, model.getEnemyAttack().toInt() - target.model.getPlayerDef().toInt()))
+        target.isDamaged(
+            max(
+                1,
+                (model.getEnemyAttack()
+                    .toInt() * target.model.getPlayerLevel() * 0.5 - target.model.getPlayerDef()).toInt()
+            )
+        )
     }
 
     fun move() {
@@ -190,7 +195,14 @@ abstract class EnemyView(
     }
 
     fun isDamaged(damage: Int) {
-        model.setEnemyHp(max(0, model.getEnemyHp().toInt() - damage))
+        model.setEnemyHp(
+            max(
+                0,
+                model.getEnemyHp().toInt()
+                        - (damage - (model.getEnemyDef()
+                    .toInt() + 3) * target.model.getPlayerLevel())
+            )
+        )
         hp_bar.update()
     }
 

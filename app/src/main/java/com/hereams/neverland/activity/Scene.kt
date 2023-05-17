@@ -55,7 +55,7 @@ class Scene: AppCompatActivity() {
 
     fun skip(view: View) {
         if(scene.isPlaying) {
-            scene.seekTo(scene.duration)
+            scene.seekTo(scene.duration + 8000)
         }
     }
 }
